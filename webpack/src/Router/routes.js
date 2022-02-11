@@ -1,12 +1,5 @@
-import React from 'react';
-import WelcomePage from './WelcomePage';
+// import React from 'react';
 
-const routes = [
-  {
-    path: '/foreman_plugin_template/welcome',
-    exact: true,
-    render: (props) => <WelcomePage {...props} />,
-  },
-];
+const routes = [];
 
 export default routes;
