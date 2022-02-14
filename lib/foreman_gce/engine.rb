@@ -15,7 +15,7 @@ module ForemanGce
       end
     end
 
-    initializer 'foreman_gce.register_plugin', :before => :finisher_hook do |_app|
+    initializer 'foreman_gce.register_plugin', before: :finisher_hook do |_app|
       Foreman::Plugin.register :foreman_gce do
         requires_foreman '>= 2.4.0'
 
@@ -24,7 +24,7 @@ module ForemanGce
 
         # Add permissions
         security_block :foreman_gce do
-          permission :view_foreman_gce, { :'foreman_gce/example' => [:new_action],
+          permission :view_foreman_gce, { 'foreman_gce/example' => [:new_action],
                                           :react => [:index] }
         end
 

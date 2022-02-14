@@ -23,23 +23,6 @@ namespace :test do
   end
 end
 
-namespace :foreman_gce do
-  task rubocop: :environment do
-    begin
-      require 'rubocop/rake_task'
-      RuboCop::RakeTask.new(:rubocop_foreman_gce) do |task|
-        task.patterns = ["#{ForemanGce::Engine.root}/app/**/*.rb",
-                         "#{ForemanGce::Engine.root}/lib/**/*.rb",
-                         "#{ForemanGce::Engine.root}/test/**/*.rb"]
-      end
-    rescue StandardError
-      puts 'Rubocop not loaded.'
-    end
-
-    Rake::Task['rubocop_foreman_gce'].invoke
-  end
-end
-
 Rake::Task[:test].enhance ['test:foreman_gce']
 
 load 'tasks/jenkins.rake'

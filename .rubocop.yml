@@ -1,41 +1,10 @@
-require:
-  - rubocop-performance
-  - rubocop-rails
-  - rubocop-minitest
-AllCops:
-  NewCops: enable
-  TargetRubyVersion: 2.5
-  TargetRailsVersion: 6.0
-  Exclude:
-    - 'extras/**/*'
-    - 'locale/**/*'
-    - 'node_modules/**/*'
-    - 'vendor/bundle/**/*'
-
-Layout/ArgumentAlignment:
-  EnforcedStyle: with_fixed_indentation
-  IndentationWidth: 2
-
-Layout/EmptyLineAfterGuardClause:
-  Enabled: false
+inherit_gem:
+  theforeman-rubocop:
+    - strict.yml
 
 Layout/LineLength:
   Enabled: 111 # TODO: discuss and set this
 
-Rails:
-  Enabled: true
-
-Style/Alias:
-  EnforcedStyle: prefer_alias_method
-
-# Don't enforce documentation
-Style/Documentation:
-  Enabled: false
-
 # Don't enforce frozen string literals
 Style/FrozenStringLiteralComment:
-  Enabled: false
-
-# Support both ruby19 and hash_rockets
-Style/HashSyntax:
   Enabled: false
