@@ -1,2 +1,2 @@
-# Matches foreman_gce.gemspec
-_('TODO: Description of ForemanGce.')
+# Matches foreman_google.gemspec
+_('TODO: Description of ForemanGoogle.')

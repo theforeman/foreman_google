@@ -10,7 +10,7 @@ Object.entries(reducers).forEach(([key, reducer]) =>
 );
 
 // register client routes
-registerRoutes('ForemanGce', Routes);
+registerRoutes('ForemanGoogle', Routes);
 
 // register fills for extending foreman core
 // http://foreman.surge.sh/?path=/docs/introduction-slot-and-fill--page

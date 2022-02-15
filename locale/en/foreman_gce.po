@@ -1,6 +1,6 @@
-# foreman_gce
+# foreman_google
 #
-# This file is distributed under the same license as foreman_gce.
+# This file is distributed under the same license as foreman_google.
 #
 #, fuzzy
 msgid ""

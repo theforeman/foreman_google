@@ -1,4 +1,4 @@
-require 'foreman_gce/engine'
+require 'foreman_google/engine'
 
-module ForemanGce
+module ForemanGoogle
 end
