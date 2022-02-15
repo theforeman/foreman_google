@@ -53,10 +53,10 @@ jobs:
           ref: ${{ matrix.foreman-core-branch }}
       - uses: actions/checkout@v2
         with:
-          path: foreman_gce
+          path: foreman_google
       - name: Setup Bundler
         run: |
-          echo "gem 'foreman_gce', path: './foreman_gce'" > bundler.d/foreman_gce.local.rb
+          echo "gem 'foreman_google', path: './foreman_google'" > bundler.d/foreman_google.local.rb
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
@@ -76,4 +76,4 @@ jobs:
       - name: Run plugin tests
         if: github.event_name != 'push'
         run: |
-          bundle exec rake test:foreman_gce
+          bundle exec rake test:foreman_google

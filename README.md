@@ -1,4 +1,4 @@
-# Foreman GCE
+# Foreman Google
 
 Foreman plugin for Google Compute Engine.
 

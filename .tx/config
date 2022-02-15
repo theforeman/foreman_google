@@ -1,8 +1,8 @@
 [main]
 host = https://www.transifex.com
 
-[foreman.foreman_gce]
-file_filter = locale/<lang>/foreman_gce.edit.po
-source_file = locale/foreman_gce.pot
+[foreman.foreman_google]
+file_filter = locale/<lang>/foreman_google.edit.po
+source_file = locale/foreman_google.pot
 source_lang = en
 type = PO

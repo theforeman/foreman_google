@@ -1,5 +1,5 @@
 {
-  "name": "foreman_gce",
+  "name": "foreman_google",
   "version": "1.0.0",
   "description": "DESCRIPTION",
   "main": "index.js",
@@ -15,10 +15,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/theforeman/foreman_gce.git"
+    "url": "git+https://github.com/theforeman/foreman_google.git"
   },
   "bugs": {
-    "url": "http://projects.theforeman.org/projects/foreman_gce/issues"
+    "url": "http://projects.theforeman.org/projects/foreman_google/issues"
   },
   "peerDependencies": {
     "@theforeman/vendor": ">= 6.0.0"

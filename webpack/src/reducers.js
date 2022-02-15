@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
 
 const reducers = {
-  foremanGce: combineReducers({}),
+  ForemanGoogle: combineReducers({}),
 };
 
 export default reducers;
