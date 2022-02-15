@@ -13,13 +13,14 @@ module ForemanGoogle
     initializer 'foreman_google.register_plugin', before: :finisher_hook do |_app|
       Foreman::Plugin.register :foreman_google do
         requires_foreman '>= 2.4.0'
+      end
     end
 
     # Include concerns in this config.to_prepare block
-    # config.to_prepare do
-    # rescue StandardError => e
-    #   Rails.logger.warn "ForemanGoogle: skipping engine hook (#{e})"
-    # end
+    config.to_prepare do
+    rescue StandardError => e
+      Rails.logger.warn "ForemanGoogle: skipping engine hook (#{e})"
+    end
 
     rake_tasks do
       Rake::Task['db:seed'].enhance do
