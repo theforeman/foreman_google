@@ -5,6 +5,9 @@ inherit_gem:
 Layout/LineLength:
   Enabled: 111 # TODO: discuss and set this
 
+Naming/MethodParameterName:
+  MinNameLength: 2
+
 # Don't enforce frozen string literals
 Style/FrozenStringLiteralComment:
   Enabled: false
