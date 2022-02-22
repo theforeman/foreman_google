@@ -13,6 +13,10 @@ module ForemanGoogle
     initializer 'foreman_google.register_plugin', before: :finisher_hook do |_app|
       Foreman::Plugin.register :foreman_google do
         requires_foreman '>= 2.4.0'
+
+        in_to_prepare do
+          compute_resource(ForemanGoogle::GCE)
+        end
       end
     end
 

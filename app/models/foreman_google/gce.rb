@@ -1,0 +1,81 @@
+module ForemanGoogle
+  class GCE < ::ComputeResource
+    def self.available?
+      true
+    end
+
+    def self.provider_friendly_name
+      'Google'
+    end
+
+    def user_data_supported?
+      true
+    end
+
+    def test_connection(options = {})
+    end
+
+    def to_label
+    end
+
+    def capabilities
+      %i[image new_volume]
+    end
+
+    def zones
+    end
+    alias_method :available_zones, :zones
+
+    def networks
+    end
+
+    def available_networks(cluster_id = nil)
+    end
+
+    def machine_types
+    end
+    alias_method :available_flavors, :machine_types
+
+    def disks
+    end
+
+    # def interfaces_attrs_name
+    #   super # :interfaces
+    # end
+
+    # This should return interface compatible with Fog::Server
+    # implemented by ForemanGoogle::Compute
+    def find_vm_by_uuid(uuid)
+    end
+
+    def destroy_vm(uuid)
+    end
+
+    def new_vm(args = {})
+    end
+
+    def create_volumes(args)
+    end
+
+    def create_vm(args = {})
+      new_vm(args)
+      create_volumes(args)
+      # TBD
+    end
+
+    def vm_options(args)
+    end
+
+    def new_volume(attrs = {})
+    end
+
+    def normalize_vm_attrs(vm_attrs)
+    end
+
+    def console(uuid)
+    end
+
+    def associated_host(vm)
+    end
+  end
+end
