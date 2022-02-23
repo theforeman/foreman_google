@@ -1,3 +1,5 @@
+require 'foreman_google/google_compute_adapter'
+
 module ForemanGoogle
   class GCE < ::ComputeResource
     def self.available?
@@ -23,6 +25,7 @@ module ForemanGoogle
     end
 
     def zones
+      client.zones.map(&:name)
     end
     alias_method :available_zones, :zones
 
@@ -76,6 +79,18 @@ module ForemanGoogle
     end
 
     def associated_host(vm)
+    end
+
+    # ----# Google specific #-----
+
+    def google_project_id
+      client.project_id
+    end
+
+    private
+
+    def client
+      @client ||= ForemanGoogle::GoogleComputeAdapter.new(auth_json_string: password)
     end
   end
 end
