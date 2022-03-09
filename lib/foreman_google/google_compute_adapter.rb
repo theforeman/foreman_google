@@ -16,6 +16,10 @@ module ForemanGoogle
       list('zones')
     end
 
+    def networks
+      list('networks')
+    end
+
     private
 
     def list(resource_name)
