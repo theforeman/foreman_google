@@ -33,5 +33,16 @@ module ForemanGoogle
         value(zones.first.description).must_be_kind_of(String)
       end
     end
+
+    describe '#networks' do
+      setup do
+        stub_request(:get, 'https://compute.googleapis.com/compute/v1/projects/coastal-haven-123456/global/networks')
+          .to_return(body: File.read(File.join(__dir__, '..', '..', 'fixtures', 'networks.json')))
+      end
+
+      it 'show networks' do
+        assert_equal ['default'], subject.networks.map(&:name)
+      end
+    end
   end
 end

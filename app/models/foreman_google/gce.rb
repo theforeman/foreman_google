@@ -30,9 +30,11 @@ module ForemanGoogle
     alias_method :available_zones, :zones
 
     def networks
+      client.networks.map(&:name)
     end
 
-    def available_networks(cluster_id = nil)
+    def available_networks(_cluster_id = nil)
+      client.networks.items
     end
 
     def machine_types
