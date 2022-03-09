@@ -6,6 +6,6 @@
       "name": "default"
     }
   ],
-  "selfLink": "https://www.googleapis.com/compute/v1/projects/modular-ethos-98809/global/networks",
+  "selfLink": "https://www.googleapis.com/compute/v1/projects/coastal-haven-123456/global/networks",
   "kind": "compute#networkList"
 }
