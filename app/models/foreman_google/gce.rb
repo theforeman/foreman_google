@@ -92,6 +92,10 @@ module ForemanGoogle
     def associated_host(vm)
     end
 
+    def available_images(filter: nil)
+      client.images(filter: filter)
+    end
+
     # ----# Google specific #-----
 
     def google_project_id
