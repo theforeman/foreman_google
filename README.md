@@ -13,7 +13,7 @@ for how to install Foreman plugins
 
 ## Contributing
 
-Fork and send a Pull Request. Thanks!
+See [Developer Guide](/docs/developer_guide.md), fork and send a pull request. Thanks!
 
 ## Copyright
 
@@ -31,4 +31,3 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
