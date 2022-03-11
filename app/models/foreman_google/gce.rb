@@ -29,6 +29,14 @@ module ForemanGoogle
     end
     alias_method :available_zones, :zones
 
+    def zone
+      url
+    end
+
+    def zone=(zone)
+      self.url = zone
+    end
+
     def networks
       client.networks.map(&:name)
     end
@@ -38,6 +46,7 @@ module ForemanGoogle
     end
 
     def machine_types
+      client.machine_types(zone)
     end
     alias_method :available_flavors, :machine_types
 

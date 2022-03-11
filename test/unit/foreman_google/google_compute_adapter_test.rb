@@ -44,5 +44,16 @@ module ForemanGoogle
         assert_equal ['default'], subject.networks.map(&:name)
       end
     end
+
+    describe '#machine_types' do
+      setup do
+        stub_request(:get, 'https://compute.googleapis.com/compute/v1/projects/coastal-haven-123456/zones/us-east1-b/machineTypes')
+          .to_return(body: File.read(File.join(__dir__, '..', '..', 'fixtures', 'machine_types.json')))
+      end
+
+      it 'list machine_types' do
+        assert_equal ['machine_type_001'], subject.machine_types('us-east1-b').map(&:name)
+      end
+    end
   end
 end
