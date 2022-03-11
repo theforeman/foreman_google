@@ -20,10 +20,14 @@ module ForemanGoogle
       list('networks')
     end
 
+    def machine_types(zone)
+      list('machine_types', opts: { zone: zone })
+    end
+
     private
 
-    def list(resource_name)
-      response = resource_client(resource_name).list(project: project_id).response
+    def list(resource_name, opts: {})
+      response = resource_client(resource_name).list(project: project_id, **opts).response
       response.items
     rescue ::Google::Cloud::Error => e
       raise Foreman::WrappedException.new(e, 'Cannot list Google resource %s', resource_name)
