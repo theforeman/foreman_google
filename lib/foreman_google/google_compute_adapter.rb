@@ -21,12 +21,12 @@ module ForemanGoogle
     end
 
     def machine_types(zone)
-      list('machine_types', opts: { zone: zone })
+      list('machine_types', zone: zone)
     end
 
     private
 
-    def list(resource_name, opts: {})
+    def list(resource_name, **opts)
       response = resource_client(resource_name).list(project: project_id, **opts).response
       response.items
     rescue ::Google::Cloud::Error => e
