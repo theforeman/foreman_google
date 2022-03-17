@@ -60,6 +60,7 @@ module ForemanGoogle
     # This should return interface compatible with Fog::Server
     # implemented by ForemanGoogle::Compute
     def find_vm_by_uuid(uuid)
+      GoogleCompute.new(client: client, zone: zone, identity: uuid.to_s)
     end
 
     def destroy_vm(uuid)
