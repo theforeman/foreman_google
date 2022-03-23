@@ -31,6 +31,14 @@ module ForemanGoogle
       list('machine_types', zone: zone)
     end
 
+    def start(zone, instance_identity)
+      manage_instance(:start, zone, instance_identity)
+    end
+
+    def stop(zone, instance_identity)
+      manage_instance(:stop, zone, instance_identity)
+    end
+
     # Setting filter to '(deprecated.state != "DEPRECATED") AND (deprecated.state != "OBSOLETE")'
     # doesn't work and returns empty array, no idea what is happening there
     def images(filter: nil)
@@ -60,6 +68,12 @@ module ForemanGoogle
       resource_client(resource_name).get(project: project_id, **opts)
     rescue ::Google::Cloud::Error => e
       raise Foreman::WrappedException.new(e, 'Could not fetch Google resource %s', resource_name)
+    end
+
+    def manage_instance(action, zone, instance_identity)
+      resource_client('instances').send(action, project: project_id, zone: zone, instance: instance_identity)
+    rescue ::Google::Cloud::Error => e
+      raise Foreman::WrappedException.new(e, 'Could not %s Google resource %s', action.to_s, resource_name)
     end
 
     def resource_client(resource_name)

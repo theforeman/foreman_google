@@ -105,5 +105,22 @@ module ForemanGoogle
         end
       end
     end
+
+    describe 'manage vm' do
+      it '#start' do
+        stub_request(:post, 'https://compute.googleapis.com/compute/v1/projects/coastal-haven-123456/zones/us-east1-b/instances/instance_name/start')
+          .to_return(status: 200, body: File.read(File.join(__dir__, '..', '..', 'fixtures', 'instance_start.json')), headers: {})
+        result = subject.start('us-east1-b', 'instance_name')
+        assert 'start', result.operation.operation_type
+      end
+
+      it '#stop' do
+        stub_request(:post, 'https://compute.googleapis.com/compute/v1/projects/coastal-haven-123456/zones/us-east1-b/instances/instance_name/stop').
+
+          to_return(status: 200, body: File.read(File.join(__dir__, '..', '..', 'fixtures', 'instance_stop.json')), headers: {})
+        result = subject.stop('us-east1-b', 'instance_name')
+        assert 'stop', result.operation.operation_type
+      end
+    end
   end
 end

@@ -30,9 +30,11 @@ module ForemanGoogle
     end
 
     def start
+      @client.start(@zone, @identity)
     end
 
     def stop
+      @client.stop(@zone, @identity)
     end
 
     def to_s
