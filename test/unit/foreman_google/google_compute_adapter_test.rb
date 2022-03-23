@@ -21,6 +21,19 @@ module ForemanGoogle
       end
     end
 
+    describe '#instance' do
+      setup do
+        stub_request(:get, 'https://compute.googleapis.com/compute/v1/projects/coastal-haven-123456/zones/us-east1-b/instances/instance-1')
+          .to_return(body: File.read(File.join(__dir__, '..', '..', 'fixtures', 'instance.json')))
+      end
+
+      it 'gets instance by id' do
+        instance = subject.instance('us-east1-b', 'instance-1')
+        value(instance).must_be_kind_of(Google::Cloud::Compute::V1::Instance)
+        value(instance.id).must_equal(123_456_789)
+      end
+    end
+
     describe '#zones' do
       setup do
         stub_request(:get, 'https://compute.googleapis.com/compute/v1/projects/coastal-haven-123456/zones')

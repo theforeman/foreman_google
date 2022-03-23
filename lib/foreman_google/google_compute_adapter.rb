@@ -12,6 +12,13 @@ module ForemanGoogle
 
     # ------ RESOURCES ------
 
+    # Returns an Google::Instance identified by instance_identity within given zone.
+    # @param zone [String] eighter full url or just zone name
+    # @param instance_identity [String] eighter an instance name or its id
+    def instance(zone, instance_identity)
+      get('instances', instance: instance_identity, zone: zone)
+    end
+
     def zones
       list('zones')
     end
@@ -47,6 +54,12 @@ module ForemanGoogle
       response.items
     rescue ::Google::Cloud::Error => e
       raise Foreman::WrappedException.new(e, 'Cannot list Google resource %s', resource_name)
+    end
+
+    def get(resource_name, **opts)
+      resource_client(resource_name).get(project: project_id, **opts)
+    rescue ::Google::Cloud::Error => e
+      raise Foreman::WrappedException.new(e, 'Could not fetch Google resource %s', resource_name)
     end
 
     def resource_client(resource_name)
