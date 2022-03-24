@@ -30,11 +30,13 @@ module ForemanGoogle
     end
 
     def start
-      @client.start(@zone, @identity)
+      raise Foreman::Exception('unable to start machine that is not persisted') unless persisted?
+      @client.start(@zone, identity)
     end
 
     def stop
-      @client.stop(@zone, @identity)
+      raise Foreman::Exception('unable to stop machine that is not persisted') unless persisted?
+      @client.stop(@zone, identity)
     end
 
     def to_s
