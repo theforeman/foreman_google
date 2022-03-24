@@ -1,0 +1,7 @@
+<%= textarea_f f, :password, :label => _("JSON key"),
+              :help_inline => file_field(:password, :json, accept: "application/JSON", onchange: 'tfm.gce.jsonLoader(this)'),
+              :id => 'gce_json', :class => 'col-md-8' %>
+
+<% zones = f.object.zones rescue [] %>
+<%= selectable_f(f, :zone, zones, {}, {:label => _('Zone'), :disabled => zones.empty?,
+                 :help_inline_permanent => load_button_f(f, zones.any?, _("Load Zones")) }) %>

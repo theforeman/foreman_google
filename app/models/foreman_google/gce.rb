@@ -14,6 +14,10 @@ module ForemanGoogle
       true
     end
 
+    def self.model_name
+      ComputeResource.model_name
+    end
+
     def test_connection(options = {})
     end
 
