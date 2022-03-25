@@ -2,7 +2,7 @@
   "id": "projects/coastal-haven-123456/global/images",
   "items": [
     {
-      "id": "0",
+      "id": "1",
       "name": "coastal-image",
       "kind": "compute#image"
     }
