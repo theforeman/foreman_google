@@ -8,6 +8,10 @@ module ForemanGoogle
 
     subject { ForemanGoogle::GoogleCompute.new(client: client, zone: zone, identity: identity) }
 
+    setup do
+      client.stubs(:project_id).returns('project_id')
+    end
+
     describe '#reload' do
       let(:zone) { 'http://test.org/fullurl/zones/zone-1' }
       let(:zone_name) { zone.split('/').last }
@@ -50,6 +54,92 @@ module ForemanGoogle
       it 'is not ready for not running instance' do
         instance.expects(:status).returns('PROVISIONING')
         value(subject).wont_be(:ready?)
+      end
+    end
+
+    describe '#name & #hostname' do
+      it 'default value' do
+        cr = ForemanGoogle::GoogleCompute.new(client: client, zone: zone, network: '')
+
+        assert_includes cr.name, 'foreman_'
+        assert_includes cr.hostname, 'foreman_'
+      end
+
+      it 'is parameterized' do
+        cr = ForemanGoogle::GoogleCompute.new(client: client, zone: zone, name: 'My new name')
+        assert_includes cr.name, 'my-new-name'
+        assert_includes cr.hostname, 'my-new-name'
+      end
+    end
+
+    describe '#network_interfaces' do
+      it 'with default value' do
+        cr = ForemanGoogle::GoogleCompute.new(client: client, zone: zone)
+        assert_includes cr.network_interfaces[0][:network], '/projects/project_id/global/networks/default'
+      end
+
+      it 'with custom value' do
+        cr = ForemanGoogle::GoogleCompute.new(client: client, zone: zone, network: 'custom')
+        assert_includes cr.network_interfaces[0][:network], '/projects/project_id/global/networks/custom'
+      end
+
+      it 'with associated external ip' do
+        cr = ForemanGoogle::GoogleCompute.new(client: client, zone: zone, associate_external_ip: '1')
+        expected_nics = [{ network: 'global/networks/default', access_configs: [{ name: 'External NAT', type: 'ONE_TO_ONE_NAT' }] }]
+
+        assert_equal cr.network_interfaces, expected_nics
+      end
+
+      it 'with nics' do
+        nics = [{ network: 'global/networks/custom' }]
+        cr = ForemanGoogle::GoogleCompute.new(client: client, zone: zone, associate_external_ip: '1', network_interfaces_list: nics)
+        expected_nics = [{ network: 'global/networks/custom', access_configs: [{ name: 'External NAT', type: 'ONE_TO_ONE_NAT' }] }]
+
+        assert_equal cr.network_interfaces, expected_nics
+      end
+    end
+
+    describe '#disks' do
+      setup do
+        client.stubs(:images).returns([OpenStruct.new(id: 1, name: 'coastal-image')])
+      end
+
+      it 'no volumes' do
+        cr = ForemanGoogle::GoogleCompute.new(client: client, zone: zone, volumes: [])
+
+        assert_equal cr.disks, []
+      end
+
+      it 'without image_id' do
+        cr = ForemanGoogle::GoogleCompute.new(client: client, zone: zone, volumes: [{ size_gb: '23' }])
+        disk = cr.disks.first
+
+        assert_equal disk.name, "#{cr.name}-disk1"
+        assert_nil disk.source_image
+      end
+
+      it 'image not found' do
+        value { ForemanGoogle::GoogleCompute.new(client: client, zone: zone, volumes: [{ size_gb: '23' }], image_id: '0') }.must_raise(::Foreman::Exception)
+      end
+
+      it 'with source_image' do
+        volumes = [{ size_gb: '23', source_image: 'centos-stream-8-v20220317' }]
+        cr = ForemanGoogle::GoogleCompute.new(client: client, zone: zone, volumes: volumes, image_id: '1')
+
+        disk = cr.disks.first
+        assert_equal disk.source_image, 'coastal-image'
+      end
+    end
+
+    describe '#metadata' do
+      it 'with user_data' do
+        cr = ForemanGoogle::GoogleCompute.new(client: client, zone: zone, user_data: 'test')
+        assert_equal cr.metadata, { items: [{ key: 'user-data', value: 'test' }] }
+      end
+
+      it 'no user_data' do
+        cr = ForemanGoogle::GoogleCompute.new(client: client, zone: zone)
+        assert_nil cr.metadata
       end
     end
   end

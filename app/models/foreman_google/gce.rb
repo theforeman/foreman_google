@@ -63,10 +63,17 @@ module ForemanGoogle
       GoogleCompute.new(client: client, zone: zone, identity: uuid.to_s)
     end
 
-    def destroy_vm(uuid)
+    def new_vm(args = {})
+      vm_args = args.deep_symbolize_keys
+
+      # convert rails nested_attributes into a plain hash
+      volumes_nested_attrs = vm_args.delete(:volumes_attributes)
+      vm_args[:volumes] = nested_attributes_for(:volumes, volumes_nested_attrs) if volumes_nested_attrs
+
+      GoogleCompute.new(client: client, zone: zone, **vm_args)
     end
 
-    def new_vm(args = {})
+    def destroy_vm(uuid)
     end
 
     def create_volumes(args)

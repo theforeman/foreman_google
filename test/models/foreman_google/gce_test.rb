@@ -7,6 +7,7 @@ module ForemanGoogle
 
     setup do
       subject.stubs(client: service)
+      service.stubs(:project_id).returns('project_id')
     end
 
     describe '#find_vm_by_uuid' do
