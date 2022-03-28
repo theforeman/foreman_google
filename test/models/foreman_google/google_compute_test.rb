@@ -59,14 +59,16 @@ module ForemanGoogle
 
     describe '#name & #hostname' do
       it 'default value' do
-        cr = ForemanGoogle::GoogleCompute.new(client: client, zone: zone, network: '')
+        args = { network: '' }
+        cr = ForemanGoogle::GoogleCompute.new(client: client, zone: zone, args: args)
 
         assert_includes cr.name, 'foreman_'
         assert_includes cr.hostname, 'foreman_'
       end
 
       it 'is parameterized' do
-        cr = ForemanGoogle::GoogleCompute.new(client: client, zone: zone, name: 'My new name')
+        args = { name: 'My new name' }
+        cr = ForemanGoogle::GoogleCompute.new(client: client, zone: zone, args: args)
         assert_includes cr.name, 'my-new-name'
         assert_includes cr.hostname, 'my-new-name'
       end
@@ -79,12 +81,14 @@ module ForemanGoogle
       end
 
       it 'with custom value' do
-        cr = ForemanGoogle::GoogleCompute.new(client: client, zone: zone, network: 'custom')
+        args = { network: 'custom' }
+        cr = ForemanGoogle::GoogleCompute.new(client: client, zone: zone, args: args)
         assert_includes cr.network_interfaces[0][:network], '/projects/project_id/global/networks/custom'
       end
 
       it 'with associated external ip' do
-        cr = ForemanGoogle::GoogleCompute.new(client: client, zone: zone, associate_external_ip: '1')
+        args = { associate_external_ip: '1' }
+        cr = ForemanGoogle::GoogleCompute.new(client: client, zone: zone, args: args)
         expected_nics = [{ network: 'global/networks/default', access_configs: [{ name: 'External NAT', type: 'ONE_TO_ONE_NAT' }] }]
 
         assert_equal cr.network_interfaces, expected_nics
@@ -92,7 +96,8 @@ module ForemanGoogle
 
       it 'with nics' do
         nics = [{ network: 'global/networks/custom' }]
-        cr = ForemanGoogle::GoogleCompute.new(client: client, zone: zone, associate_external_ip: '1', network_interfaces_list: nics)
+        args = { associate_external_ip: '1', network_interfaces: nics }
+        cr = ForemanGoogle::GoogleCompute.new(client: client, zone: zone, args: args)
         expected_nics = [{ network: 'global/networks/custom', access_configs: [{ name: 'External NAT', type: 'ONE_TO_ONE_NAT' }] }]
 
         assert_equal cr.network_interfaces, expected_nics
@@ -105,13 +110,15 @@ module ForemanGoogle
       end
 
       it 'no volumes' do
-        cr = ForemanGoogle::GoogleCompute.new(client: client, zone: zone, volumes: [])
+        args = { volumes: [] }
+        cr = ForemanGoogle::GoogleCompute.new(client: client, zone: zone, args: args)
 
         assert_equal cr.disks, []
       end
 
       it 'without image_id' do
-        cr = ForemanGoogle::GoogleCompute.new(client: client, zone: zone, volumes: [{ size_gb: '23' }])
+        args = { volumes: [{ size_gb: '23' }] }
+        cr = ForemanGoogle::GoogleCompute.new(client: client, zone: zone, args: args)
         disk = cr.disks.first
 
         assert_equal disk.name, "#{cr.name}-disk1"
@@ -119,12 +126,13 @@ module ForemanGoogle
       end
 
       it 'image not found' do
-        value { ForemanGoogle::GoogleCompute.new(client: client, zone: zone, volumes: [{ size_gb: '23' }], image_id: '0') }.must_raise(::Foreman::Exception)
+        args = { volumes: [{ size_gb: '23' }], image_id: '0' }
+        value { ForemanGoogle::GoogleCompute.new(client: client, zone: zone, args: args) }.must_raise(::Foreman::Exception)
       end
 
       it 'with source_image' do
-        volumes = [{ size_gb: '23', source_image: 'centos-stream-8-v20220317' }]
-        cr = ForemanGoogle::GoogleCompute.new(client: client, zone: zone, volumes: volumes, image_id: '1')
+        args = { volumes: [{ size_gb: '23', source_image: 'centos-stream-8-v20220317' }], image_id: '1' }
+        cr = ForemanGoogle::GoogleCompute.new(client: client, zone: zone, args: args)
 
         disk = cr.disks.first
         assert_equal disk.source_image, 'coastal-image'
@@ -133,7 +141,8 @@ module ForemanGoogle
 
     describe '#metadata' do
       it 'with user_data' do
-        cr = ForemanGoogle::GoogleCompute.new(client: client, zone: zone, user_data: 'test')
+        args = { user_data: 'test' }
+        cr = ForemanGoogle::GoogleCompute.new(client: client, zone: zone, args: args)
         assert_equal cr.metadata, { items: [{ key: 'user-data', value: 'test' }] }
       end
 

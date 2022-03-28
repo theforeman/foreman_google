@@ -3,25 +3,23 @@ module ForemanGoogle
     attr_reader :identity, :name, :hostname, :machine_type, :network_interfaces,
       :associate_external_ip, :image_id, :disks, :metadata
 
-    # rubocop:disable Metrics/MethodLength, Metrics/ParameterLists
-    def initialize(client:, zone:, identity: nil, name: nil, machine_type: nil,
-                   network: 'default', associate_external_ip: nil, network_interfaces_list: [],
-                   image_id: nil, volumes: [], user_data: nil)
+    # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+    def initialize(client:, zone:, identity: nil, args: {})
       @client = client
       @zone = zone
       @identity = identity
 
-      @name = parameterize_name(name)
+      @name = parameterize_name(args[:name])
       @hostname = @name
-      @machine_type = machine_type
-      @network_interfaces = construct_network(network, associate_external_ip, network_interfaces_list)
-      @image_id = image_id
-      @disks = load_disks(image_id, volumes)
-      @metadata = construct_metadata(user_data)
+      @machine_type = args[:machine_type]
+      @network_interfaces = construct_network(args[:network] || 'default', args[:associate_external_ip] || '0', args[:network_interfaces] || [])
+      @image_id = args[:image_id]
+      @disks = load_disks(args[:image_id], args[:volumes])
+      @metadata = construct_metadata(args[:user_data])
 
       identity && load
     end
-    # rubocop:enable Metrics/MethodLength, Metrics/ParameterLists
+    # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
 
     def persisted?
       !!identity
@@ -82,17 +80,17 @@ module ForemanGoogle
       name&.parameterize || "foreman_#{Time.now.to_i}"
     end
 
-    def construct_network(network_name, associate_external_ip, network_interfaces_list)
+    def construct_network(network_name, associate_external_ip, network_interfaces)
       # handle network_interface for external ip
       # assign  ephemeral external IP address using associate_external_ip
       if ActiveModel::Type::Boolean.new.cast(associate_external_ip)
-        network_interfaces_list = [{ network: 'global/networks/default' }] if network_interfaces_list.empty?
+        network_interfaces = [{ network: 'global/networks/default' }] if network_interfaces.empty?
         access_config = { name: 'External NAT', type: 'ONE_TO_ONE_NAT' }
 
         # Note - no support for external_ip from foreman
         # access_config[:nat_ip] = external_ip if external_ip
-        network_interfaces_list[0][:access_configs] = [access_config]
-        return network_interfaces_list
+        network_interfaces[0][:access_configs] = [access_config]
+        return network_interfaces
       end
 
       network = "https://compute.googleapis.com/compute/v1/projects/#{@client.project_id}/global/networks/#{network_name}"
@@ -107,7 +105,7 @@ module ForemanGoogle
       image
     end
 
-    def load_disks(image_id, volumes)
+    def load_disks(image_id, volumes = [])
       return [] if volumes.empty?
       image = load_image(image_id)
 
