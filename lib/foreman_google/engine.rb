@@ -22,6 +22,7 @@ module ForemanGoogle
 
     # Include concerns in this config.to_prepare block
     config.to_prepare do
+      ::ComputeResourcesController.include ForemanGoogle::TemporaryPrependPath
     rescue StandardError => e
       Rails.logger.warn "ForemanGoogle: skipping engine hook (#{e})"
     end
