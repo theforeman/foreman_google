@@ -7,7 +7,7 @@
           "tags": {
             "fingerprint": "42WmSpB8rSM="
           },
-          "machineType": "https://www.googleapis.com/compute/v1/projectscoastal-haven-123456zones/us-east1-b/machineTypes/e2-micro",
+          "machineType": "https://www.googleapis.com/compute/v1/projects/coastal-haven-123456/zones/us-east1-b/machineTypes/e2-micro",
           "status": "RUNNING",
           "zone": "https://www.googleapis.com/compute/v1/projects/coastal-haven-123456/zones/us-east1-b",
           "canIpForward": false,

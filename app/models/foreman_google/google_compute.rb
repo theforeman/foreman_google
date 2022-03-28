@@ -1,6 +1,10 @@
+require 'google/apis/compute_v1'
+
+# TODO: enable back after https://github.com/stejskalleos/foreman_google/issues/21
+# rubocop:disable Metrics/ClassLength
 module ForemanGoogle
   class GoogleCompute
-    attr_reader :identity, :name, :hostname, :machine_type, :network_interfaces,
+    attr_reader :identity, :name, :hostname, :machine_type, :network_interfaces, :volumes,
       :associate_external_ip, :image_id, :disks, :metadata
 
     # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
@@ -14,7 +18,7 @@ module ForemanGoogle
       @machine_type = args[:machine_type]
       @network_interfaces = construct_network(args[:network] || 'default', args[:associate_external_ip] || '0', args[:network_interfaces] || [])
       @image_id = args[:image_id]
-      @disks = load_disks(args[:image_id], args[:volumes])
+      @volumes = construct_volumes(args[:image_id], args[:volumes])
       @metadata = construct_metadata(args[:user_data])
 
       identity && load
@@ -58,11 +62,38 @@ module ForemanGoogle
       @network_interfaces
     end
 
-    def interfaces_attributes=(attrs)
+    def create_volumes
+      @volumes.each do |volume|
+        @client.insert_disk(@zone, volume)
+      end
     end
 
-    def volumes
-      @disks
+    def wait_for_volumes
+      @volumes.each do |disk|
+        wait_for { @client.disk(@zone, disk[:name]).status == 'READY' }
+      end
+    end
+
+    def destroy_volumes
+      @volumes.each do |disk|
+        @client.delete_disk(@zone, disk[:name])
+      end
+    end
+
+    def create_instance
+      args = {
+        name: @name,
+        machine_type: "zones/#{@zone}/machineTypes/#{@machine_type}",
+        disks: @volumes.map.with_index { |vol, i| { source: "zones/#{@zone}/disks/#{vol[:name]}", boot: i.zero? } },
+        network_interfaces: @network_interfaces,
+        metadata: @metadata,
+      }
+
+      @client.insert_instance(@zone, args)
+    end
+
+    def set_disk_auto_delete
+      @client.set_disk_auto_delete(@zone, @name)
     end
 
     private
@@ -105,16 +136,17 @@ module ForemanGoogle
       image
     end
 
-    def load_disks(image_id, volumes = [])
+    def construct_volumes(image_id, volumes = [])
       return [] if volumes.empty?
       image = load_image(image_id)
 
-      volumes.first[:source_image] = image.name if image
-      # TODO: Is OpenStruct enough to replace Fog::Compute::Google::Disk
-      #       or do we need our own class?
-      volumes.map.with_index do |vol_attrs, i|
-        OpenStruct.new(**vol_attrs.merge(name: "#{@name}-disk#{i + 1}"))
+      new_vol_attrs = volumes.map.with_index do |vol_attrs, i|
+        { name: "#{@name}-disk#{i + 1}",
+          size_gb: vol_attrs[:size_gb]&.to_i }
       end
+
+      new_vol_attrs.first[:source_image] = image&.self_link
+      new_vol_attrs
     end
 
     # Note - GCE only supports cloud-init for Container Optimized images and
@@ -123,5 +155,22 @@ module ForemanGoogle
       return if user_data.blank?
       { items: [{ key: 'user-data', value: user_data }] }
     end
+
+    def wait_for
+      timeout = 60
+      duration = 0
+      interval = 0.5
+
+      start = Time.zone.now
+      loop do
+        break if yield
+
+        raise "The specified wait_for timeout (#{timeout} seconds) was exceeded" if duration > timeout
+
+        sleep(interval)
+        duration = Time.zone.now - start
+      end
+    end
   end
 end
+# rubocop:enable Metrics/ClassLength
