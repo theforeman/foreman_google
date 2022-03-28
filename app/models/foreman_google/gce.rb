@@ -70,7 +70,7 @@ module ForemanGoogle
       volumes_nested_attrs = vm_args.delete(:volumes_attributes)
       vm_args[:volumes] = nested_attributes_for(:volumes, volumes_nested_attrs) if volumes_nested_attrs
 
-      GoogleCompute.new(client: client, zone: zone, **vm_args)
+      GoogleCompute.new(client: client, zone: zone, args: vm_args)
     end
 
     def destroy_vm(uuid)
