@@ -1,5 +1,6 @@
 require 'google-cloud-compute'
 
+# rubocop:disable Rails/SkipsModelValidations
 module ForemanGoogle
   class GoogleComputeAdapter
     def initialize(auth_json_string:)
@@ -11,6 +12,10 @@ module ForemanGoogle
     end
 
     # ------ RESOURCES ------
+
+    def insert_instance(zone, attrs = {})
+      resource_client('instances').insert(project: project_id, zone: zone, instance_resource: attrs)
+    end
 
     # Returns an Google::Instance identified by instance_identity within given zone.
     # @param zone [String] eighter full url or just zone name
@@ -32,11 +37,11 @@ module ForemanGoogle
     end
 
     def start(zone, instance_identity)
-      manage_instance(:start, zone, instance_identity)
+      manage_instance(:start, zone: zone, instance: instance_identity)
     end
 
     def stop(zone, instance_identity)
-      manage_instance(:stop, zone, instance_identity)
+      manage_instance(:stop, zone: zone, instance: instance_identity)
     end
 
     # Setting filter to '(deprecated.state != "DEPRECATED") AND (deprecated.state != "OBSOLETE")'
@@ -45,6 +50,28 @@ module ForemanGoogle
       projects = [project_id] + all_projects
       all_images = projects.map { |project| list_images(project, filter: filter) }
       all_images.flatten.reject(&:deprecated)
+    end
+
+    def insert_disk(zone, disk_attrs = {})
+      insert('disks', zone, disk_resource: disk_attrs)
+    end
+
+    def disk(zone, name)
+      get('disks', disk: name, zone: zone)
+    end
+
+    def delete_disk(zone, disk_name)
+      delete('disks', zone, disk: disk_name)
+    end
+
+    def set_disk_auto_delete(zone, instance_identity)
+      instance = instance(zone, instance_identity)
+      instance.disks.each do |disk|
+        manage_instance :set_disk_auto_delete, zone: zone,
+                        device_name: disk.device_name,
+                        instance: instance_identity,
+                        auto_delete: true
+      end
     end
 
     private
@@ -56,6 +83,24 @@ module ForemanGoogle
       raise Foreman::WrappedException.new(e, 'Cannot list Google resource %s', resource_name)
     end
 
+    def get(resource_name, **opts)
+      resource_client(resource_name).get(project: project_id, **opts)
+    rescue ::Google::Cloud::Error => e
+      raise Foreman::WrappedException.new(e, 'Could not fetch Google resource %s', resource_name)
+    end
+
+    def insert(resource_name, zone, **opts)
+      resource_client(resource_name).insert(project: project_id, zone: zone, **opts)
+    rescue ::Google::Cloud::Error => e
+      raise Foreman::WrappedException.new(e, 'Could not create Google resource %s', resource_name)
+    end
+
+    def delete(resource_name, zone, **opts)
+      resource_client(resource_name).delete(project: project_id, zone: zone, **opts)
+    rescue ::Google::Cloud::Error => e
+      raise Foreman::WrappedException.new(e, 'Could not delete Google resource %s', resource_name)
+    end
+
     def list_images(project, **opts)
       resource_name = 'images'
       response = resource_client(resource_name).list(project: project, **opts).response
@@ -64,14 +109,8 @@ module ForemanGoogle
       raise Foreman::WrappedException.new(e, 'Cannot list Google resource %s', resource_name)
     end
 
-    def get(resource_name, **opts)
-      resource_client(resource_name).get(project: project_id, **opts)
-    rescue ::Google::Cloud::Error => e
-      raise Foreman::WrappedException.new(e, 'Could not fetch Google resource %s', resource_name)
-    end
-
-    def manage_instance(action, zone, instance_identity)
-      resource_client('instances').send(action, project: project_id, zone: zone, instance: instance_identity)
+    def manage_instance(action, **opts)
+      resource_client('instances').send(action, project: project_id, **opts)
     rescue ::Google::Cloud::Error => e
       raise Foreman::WrappedException.new(e, 'Could not %s Google resource %s', action.to_s, resource_name)
     end
@@ -89,3 +128,4 @@ module ForemanGoogle
     end
   end
 end
+# rubocop:enable Rails/SkipsModelValidations

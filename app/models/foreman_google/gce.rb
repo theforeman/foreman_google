@@ -1,7 +1,12 @@
 require 'foreman_google/google_compute_adapter'
 
+# rubocop:disable Rails/InverseOf
 module ForemanGoogle
   class GCE < ::ComputeResource
+    has_one :key_pair, foreign_key: :compute_resource_id, dependent: :destroy
+    before_create :setup_key_pair
+    validates :password, :zone, presence: true
+
     def self.available?
       true
     end
@@ -80,13 +85,17 @@ module ForemanGoogle
     def destroy_vm(uuid)
     end
 
-    def create_volumes(args)
-    end
-
     def create_vm(args = {})
-      new_vm(args)
-      create_volumes(args)
-      # TBD
+      ssh_args = { username: images.find_by(uuid: args[:image_id])&.username, public_key: key_pair.public }
+
+      vm = new_vm(args.merge(ssh_args))
+      vm.create_volumes
+      vm.wait_for_volumes
+      vm.create_instance
+      vm.set_disk_auto_delete
+    rescue ::Google::Cloud::Error => e
+      Foreman::Logging.exception('Unhandled Google Compute Engine error', e)
+      vm.destroy_volumes
     end
 
     def vm_options(args)
@@ -114,6 +123,13 @@ module ForemanGoogle
       client.project_id
     end
 
+    def setup_key_pair
+      require 'sshkey'
+
+      key = ::SSHKey.generate
+      build_key_pair name: "foreman-#{id}#{Foreman.uuid}", secret: key.private_key, public: key.ssh_public_key
+    end
+
     private
 
     def client
@@ -121,3 +137,4 @@ module ForemanGoogle
     end
   end
 end
+# rubocop:enable Rails/InverseOf

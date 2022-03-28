@@ -107,19 +107,74 @@ module ForemanGoogle
     end
 
     describe 'manage vm' do
+      it '#insert' do
+        stub_request(:post, 'https://compute.googleapis.com/compute/v1/projects/coastal-haven-123456/zones/us-east1-b/instances')
+          .to_return(status: 200, body: File.read(File.join(__dir__, '..', '..', 'fixtures', 'instance_insert.json')))
+
+        args = {
+          name: 'foreman-test',
+          machine_type: 'zones/us-east1-b/machineTypes/e2-micro',
+          disks: [{ source: 'zones/us-east1-b/disks/foreman-test-disk1', boot: true }],
+          network_interfaces: [{ network: 'global/networks/default' }],
+        }
+
+        result = subject.insert_instance('us-east1-b', args)
+
+        assert 'insert', result.operation.operation_type
+        assert_includes result.operation.target_link, 'foreman-test-google'
+      end
+
       it '#start' do
         stub_request(:post, 'https://compute.googleapis.com/compute/v1/projects/coastal-haven-123456/zones/us-east1-b/instances/instance_name/start')
-          .to_return(status: 200, body: File.read(File.join(__dir__, '..', '..', 'fixtures', 'instance_start.json')), headers: {})
+          .to_return(status: 200, body: File.read(File.join(__dir__, '..', '..', 'fixtures', 'instance_start.json')))
         result = subject.start('us-east1-b', 'instance_name')
         assert 'start', result.operation.operation_type
       end
 
       it '#stop' do
-        stub_request(:post, 'https://compute.googleapis.com/compute/v1/projects/coastal-haven-123456/zones/us-east1-b/instances/instance_name/stop').
-
-          to_return(status: 200, body: File.read(File.join(__dir__, '..', '..', 'fixtures', 'instance_stop.json')), headers: {})
+        stub_request(:post, 'https://compute.googleapis.com/compute/v1/projects/coastal-haven-123456/zones/us-east1-b/instances/instance_name/stop')
+          .to_return(status: 200, body: File.read(File.join(__dir__, '..', '..', 'fixtures', 'instance_stop.json')))
         result = subject.stop('us-east1-b', 'instance_name')
         assert 'stop', result.operation.operation_type
+      end
+
+      it '#set_disk_auto_delete' do
+        stub_request(:get, 'https://compute.googleapis.com/compute/v1/projects/coastal-haven-123456/zones/us-east1-b/instances/instance_name')
+          .to_return(body: File.read(File.join(__dir__, '..', '..', 'fixtures', 'instance.json')))
+
+        stub_request(:post, 'https://compute.googleapis.com/compute/v1/projects/coastal-haven-123456/zones/us-east1-b/instances/instance_name/setDiskAutoDelete?autoDelete=true&deviceName=instance-1')
+          .to_return(status: 200, body: File.read(File.join(__dir__, '..', '..', 'fixtures', 'instance_set_disk_auto_delete.json')))
+        result = subject.set_disk_auto_delete('us-east1-b', 'instance_name')
+
+        assert 'device-1', result[0].source
+        assert result[0].auto_delete
+      end
+    end
+
+    describe 'disks' do
+      it '#insert' do
+        stub_request(:post, 'https://compute.googleapis.com/compute/v1/projects/coastal-haven-123456/zones/us-east1-b/disks')
+          .to_return(status: 200, body: File.read(File.join(__dir__, '..', '..', 'fixtures', 'disks_insert.json')))
+
+        result = subject.insert_disk('us-east1-b', { name: 'foreman-disk1', size_gb: 23 })
+        assert_includes result.operation.target_link, 'foreman-disk1'
+        assert 'insert', result.operation.operation_type
+      end
+
+      it '#get' do
+        stub_request(:get, 'https://compute.googleapis.com/compute/v1/projects/coastal-haven-123456/zones/us-east1-b/disks/foreman-disk1')
+          .to_return(status: 200, body: File.read(File.join(__dir__, '..', '..', 'fixtures', 'disks_get.json')))
+        result = subject.disk('us-east1-b', 'foreman-disk1')
+        assert 'foreman-disk1', result.name
+      end
+
+      it '#delete' do
+        stub_request(:delete, 'https://compute.googleapis.com/compute/v1/projects/coastal-haven-123456/zones/us-east1-b/disks/foreman-disk1')
+          .to_return(status: 200, body: File.read(File.join(__dir__, '..', '..', 'fixtures', 'disks_delete.json')))
+        result = subject.delete_disk('us-east1-b', 'foreman-disk1')
+
+        assert_includes result.operation.target_link, 'foreman-disk1'
+        assert 'delete', result.operation.operation_type
       end
     end
   end

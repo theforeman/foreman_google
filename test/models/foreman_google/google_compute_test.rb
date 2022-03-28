@@ -104,25 +104,25 @@ module ForemanGoogle
       end
     end
 
-    describe '#disks' do
+    describe '#volumes' do
       setup do
-        client.stubs(:images).returns([OpenStruct.new(id: 1, name: 'coastal-image')])
+        client.stubs(:images).returns([OpenStruct.new(id: 1, name: 'coastal-image', self_link: 'test-self-link')])
       end
 
       it 'no volumes' do
         args = { volumes: [] }
         cr = ForemanGoogle::GoogleCompute.new(client: client, zone: zone, args: args)
 
-        assert_equal cr.disks, []
+        assert_equal cr.volumes, []
       end
 
       it 'without image_id' do
         args = { volumes: [{ size_gb: '23' }] }
         cr = ForemanGoogle::GoogleCompute.new(client: client, zone: zone, args: args)
-        disk = cr.disks.first
+        volume = cr.volumes.first
 
-        assert_equal disk.name, "#{cr.name}-disk1"
-        assert_nil disk.source_image
+        assert_equal volume[:name], "#{cr.name}-disk1"
+        assert_nil volume[:source_image]
       end
 
       it 'image not found' do
@@ -134,8 +134,8 @@ module ForemanGoogle
         args = { volumes: [{ size_gb: '23', source_image: 'centos-stream-8-v20220317' }], image_id: '1' }
         cr = ForemanGoogle::GoogleCompute.new(client: client, zone: zone, args: args)
 
-        disk = cr.disks.first
-        assert_equal disk.source_image, 'coastal-image'
+        volume = cr.volumes.first
+        assert_equal volume[:source_image], 'test-self-link'
       end
     end
 
