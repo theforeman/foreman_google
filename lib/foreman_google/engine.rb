@@ -3,6 +3,13 @@ module ForemanGoogle
     isolate_namespace ForemanGoogle
     engine_name 'foreman_google'
 
+    assets_to_precompile =
+      Dir.chdir(root) do
+        Dir['app/assets/javascripts/**/*'].map do |f|
+          f.split(File::SEPARATOR, 4).last
+        end
+      end
+
     # Add any db migrations
     initializer 'foreman_google.load_app_instance_data' do |app|
       ForemanGoogle::Engine.paths['db/migrate'].existent.each do |path|
@@ -17,6 +24,8 @@ module ForemanGoogle
         in_to_prepare do
           compute_resource(ForemanGoogle::GCE)
         end
+
+        precompile_assets(*assets_to_precompile)
       end
     end
 

@@ -110,6 +110,10 @@ module ForemanGoogle
       client.project_id
     end
 
+    def self.model_name
+      ComputeResource.model_name
+    end
+
     private
 
     def client
