@@ -23,10 +23,19 @@ module ForemanGoogle
     end
 
     def to_label
+      "#{name} (#{zone}-#{provider_friendly_name})"
     end
 
     def capabilities
       %i[image new_volume]
+    end
+
+    def project
+      JSON.parse(password)['project_id']
+    end
+
+    def email
+      JSON.parse(password)['email']
     end
 
     def zones
@@ -56,6 +65,7 @@ module ForemanGoogle
     alias_method :available_flavors, :machine_types
 
     def disks
+      client.disks(zone).map(&:name)
     end
 
     # def interfaces_attrs_name

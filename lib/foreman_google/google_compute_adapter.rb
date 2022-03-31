@@ -52,6 +52,10 @@ module ForemanGoogle
       all_images.flatten.reject(&:deprecated)
     end
 
+    def disks(zone)
+      list('disks', zone: zone)
+    end
+
     def insert_disk(zone, disk_attrs = {})
       insert('disks', zone, disk_resource: disk_attrs)
     end
