@@ -62,8 +62,8 @@ module ForemanGoogle
         args = { network: '' }
         cr = ForemanGoogle::GoogleCompute.new(client: client, zone: zone, args: args)
 
-        assert_includes cr.name, 'foreman_'
-        assert_includes cr.hostname, 'foreman_'
+        assert_includes cr.name, 'foreman-'
+        assert_includes cr.hostname, 'foreman-'
       end
 
       it 'is parameterized' do
