@@ -151,5 +151,12 @@ module ForemanGoogle
         assert_nil cr.metadata
       end
     end
+
+    it '#pretty_machine_type' do
+      instance = OpenStruct.new(machine_type: 'https://www.googleapis.com/compute/v1/projects/coastal-haven-123456/zones/us-east1-b/machineTypes/e2-micro')
+      cr = ForemanGoogle::GoogleCompute.new(client: client, zone: zone, instance: instance)
+
+      assert_equal cr.pretty_machine_type, 'e2-micro'
+    end
   end
 end

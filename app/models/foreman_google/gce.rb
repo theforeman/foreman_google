@@ -117,6 +117,10 @@ module ForemanGoogle
       client.images(filter: filter)
     end
 
+    def vms(attrs = {})
+      GoogleCloudCompute::ComputeCollection.new(client, zone, attrs)
+    end
+
     # ----# Google specific #-----
 
     def google_project_id

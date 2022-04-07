@@ -24,6 +24,10 @@ module ForemanGoogle
       get('instances', instance: instance_identity, zone: zone)
     end
 
+    def instances(zone, **attrs)
+      list('instances', zone: zone, **attrs)
+    end
+
     def zones
       list('zones')
     end
