@@ -1,18 +1,21 @@
 require 'google/apis/compute_v1'
 
 # TODO: enable back after https://github.com/stejskalleos/foreman_google/issues/21
-# rubocop:disable Metrics/ClassLength
+# rubocop:disable Metrics/ClassLength, Metrics/MethodLength
 module ForemanGoogle
   class GoogleCompute
     attr_reader :identity, :name, :hostname, :machine_type, :network_interfaces, :volumes,
       :associate_external_ip, :image_id, :disks, :metadata
 
-    # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
-    def initialize(client:, zone:, identity: nil, args: {})
+    # rubocop:disable Metrics/AbcSize
+    def initialize(client:, zone:, identity: nil, instance: nil, args: {})
       @client = client
       @zone = zone
       @identity = identity
+      @instance = instance
 
+      # TODO: Following parameters should be in separate attribute class
+      # https://github.com/stejskalleos/foreman_google/issues/21
       @name = parameterize_name(args[:name])
       @hostname = @name
       @machine_type = args[:machine_type]
@@ -21,9 +24,9 @@ module ForemanGoogle
       @volumes = construct_volumes(args[:image_id], args[:volumes])
       @metadata = construct_metadata(args[:user_data])
 
-      identity && load
+      load if identity && !!!instance
     end
-    # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
+    # rubocop:enable Metrics/AbcSize
 
     def persisted?
       !!identity
@@ -42,8 +45,9 @@ module ForemanGoogle
     # @returns [String] one of PROVISIONING, STAGING, RUNNING, STOPPING, SUSPENDING, SUSPENDED, REPAIRING, and TERMINATED
     # if nil, instance is not persisted as VM on GCE
     def status
-      persisted? && instance.status
+      persisted? && @instance.status
     end
+    alias_method :state, :status
 
     def start
       raise Foreman::Exception('unable to start machine that is not persisted') unless persisted?
@@ -56,6 +60,7 @@ module ForemanGoogle
     end
 
     def to_s
+      @instance&.name
     end
 
     def interfaces
@@ -96,12 +101,11 @@ module ForemanGoogle
       @client.set_disk_auto_delete(@zone, @name)
     end
 
-    private
-
-    def instance
-      return unless identity
-      @instance || load
+    def pretty_machine_type
+      @instance.machine_type.split('/').last
     end
+
+    private
 
     def load
       @instance = @client.instance(@zone.split('/').last, identity)
@@ -173,4 +177,4 @@ module ForemanGoogle
     end
   end
 end
-# rubocop:enable Metrics/ClassLength
+# rubocop:enable Metrics/ClassLength, Metrics/MethodLength

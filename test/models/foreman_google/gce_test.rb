@@ -27,5 +27,21 @@ module ForemanGoogle
         value { subject.find_vm_by_uuid('non-existing-name-or-id') }.must_raise(Foreman::WrappedException)
       end
     end
+
+    describe '#vms' do
+      let(:instances) { [OpenStruct.new(name: 'instance1'), OpenStruct.new(name: 'instance2')] }
+
+      setup do
+        service.expects(:instances).returns(instances)
+      end
+
+      it 'iteration over the vms array' do
+        subject.vms.each_with_index { |instance, i| assert instance.name, instances[i].name }
+      end
+
+      it 'all method' do
+        subject.vms.each_with_index { |instance, i| assert instance.name, instances[i].name }
+      end
+    end
   end
 end
