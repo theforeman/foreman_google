@@ -57,106 +57,31 @@ module ForemanGoogle
       end
     end
 
-    describe '#name & #hostname' do
-      it 'default value' do
-        args = { network: '' }
-        cr = ForemanGoogle::GoogleCompute.new(client: client, zone: zone, args: args)
-
-        assert_includes cr.name, 'foreman-'
-        assert_includes cr.hostname, 'foreman-'
-      end
-
-      it 'is parameterized' do
-        args = { name: 'My new name' }
-        cr = ForemanGoogle::GoogleCompute.new(client: client, zone: zone, args: args)
-        assert_includes cr.name, 'my-new-name'
-        assert_includes cr.hostname, 'my-new-name'
-      end
-    end
-
-    describe '#network_interfaces' do
-      it 'with default value' do
-        cr = ForemanGoogle::GoogleCompute.new(client: client, zone: zone)
-        assert_includes cr.network_interfaces[0][:network], '/projects/project_id/global/networks/default'
-      end
-
-      it 'with custom value' do
-        args = { network: 'custom' }
-        cr = ForemanGoogle::GoogleCompute.new(client: client, zone: zone, args: args)
-        assert_includes cr.network_interfaces[0][:network], '/projects/project_id/global/networks/custom'
-      end
-
-      it 'with associated external ip' do
-        args = { associate_external_ip: '1' }
-        cr = ForemanGoogle::GoogleCompute.new(client: client, zone: zone, args: args)
-        expected_nics = [{ network: 'global/networks/default', access_configs: [{ name: 'External NAT', type: 'ONE_TO_ONE_NAT' }] }]
-
-        assert_equal cr.network_interfaces, expected_nics
-      end
-
-      it 'with nics' do
-        nics = [{ network: 'global/networks/custom' }]
-        args = { associate_external_ip: '1', network_interfaces: nics }
-        cr = ForemanGoogle::GoogleCompute.new(client: client, zone: zone, args: args)
-        expected_nics = [{ network: 'global/networks/custom', access_configs: [{ name: 'External NAT', type: 'ONE_TO_ONE_NAT' }] }]
-
-        assert_equal cr.network_interfaces, expected_nics
-      end
-    end
-
-    describe '#volumes' do
-      setup do
-        client.stubs(:images).returns([OpenStruct.new(id: 1, name: 'coastal-image', self_link: 'test-self-link')])
-      end
-
-      it 'no volumes' do
-        args = { volumes: [] }
-        cr = ForemanGoogle::GoogleCompute.new(client: client, zone: zone, args: args)
-
-        assert_equal cr.volumes, []
-      end
-
-      it 'without image_id' do
-        args = { volumes: [{ size_gb: '23' }] }
-        cr = ForemanGoogle::GoogleCompute.new(client: client, zone: zone, args: args)
-        volume = cr.volumes.first
-
-        assert_equal volume[:name], "#{cr.name}-disk1"
-        assert_nil volume[:source_image]
-      end
-
-      it 'image not found' do
-        args = { volumes: [{ size_gb: '23' }], image_id: '0' }
-        value { ForemanGoogle::GoogleCompute.new(client: client, zone: zone, args: args) }.must_raise(::Foreman::Exception)
-      end
-
-      it 'with source_image' do
-        args = { volumes: [{ size_gb: '23', source_image: 'centos-stream-8-v20220317' }], image_id: '1' }
-        cr = ForemanGoogle::GoogleCompute.new(client: client, zone: zone, args: args)
-
-        volume = cr.volumes.first
-        assert_equal volume[:source_image], 'test-self-link'
-      end
-    end
-
-    describe '#metadata' do
-      it 'with user_data' do
-        args = { user_data: 'test' }
-        cr = ForemanGoogle::GoogleCompute.new(client: client, zone: zone, args: args)
-        assert_equal cr.metadata, { items: [{ key: 'user-data', value: 'test' }] }
-      end
-
-      it 'no user_data' do
-        cr = ForemanGoogle::GoogleCompute.new(client: client, zone: zone)
-        assert_nil cr.metadata
-      end
-    end
-
     it '#pretty_machine_type' do
       instance = OpenStruct.new(machine_type: 'https://www.googleapis.com/compute/v1/projects/coastal-haven-123456/zones/us-east1-b/machineTypes/e2-micro')
       cr = ForemanGoogle::GoogleCompute.new(client: client, zone: zone, instance: instance)
 
       assert_equal cr.pretty_machine_type, 'e2-micro'
+    end
+
+    describe 'instance_variables' do
+      let(:new_args) { { name: 'new-name' } }
+      let(:instance) { OpenStruct.new(name: 'instance-name') }
+
+      it 'with args for new' do
+        cr = ForemanGoogle::GoogleCompute.new(client: client, zone: zone, args: new_args)
+        assert_equal cr.name, new_args[:name]
+      end
+
+      it 'with set instance' do
+        cr = ForemanGoogle::GoogleCompute.new(client: client, zone: zone, instance: instance)
+        assert_equal cr.name, instance.name
+      end
+
+      it 'with args for new and with instance' do
+        cr = ForemanGoogle::GoogleCompute.new(client: client, zone: zone, args: new_args, instance: instance)
+        assert_equal cr.name, instance.name
+      end
     end
   end
 end
