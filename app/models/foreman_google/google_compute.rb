@@ -108,7 +108,7 @@ module ForemanGoogle
     end
 
     def parameterize_name(name)
-      name&.parameterize || "foreman_#{Time.now.to_i}"
+      name&.parameterize || "foreman-#{Time.now.to_i}"
     end
 
     def construct_network(network_name, associate_external_ip, network_interfaces)
