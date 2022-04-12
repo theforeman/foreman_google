@@ -1,32 +1,28 @@
 require 'google/apis/compute_v1'
 
 # TODO: enable back after https://github.com/stejskalleos/foreman_google/issues/21
-# rubocop:disable Metrics/ClassLength, Metrics/MethodLength
+# rubocop:disable Metrics/ClassLength
 module ForemanGoogle
   class GoogleCompute
-    attr_reader :identity, :name, :hostname, :machine_type, :network_interfaces, :volumes,
-      :associate_external_ip, :image_id, :disks, :metadata
+    attr_reader :identity, :name, :hostname, :creation_timestamp, :machine_type, :network_interfaces, :volumes,
+      :associate_external_ip, :zone_name, :image_id, :disks, :metadata
 
-    # rubocop:disable Metrics/AbcSize
     def initialize(client:, zone:, identity: nil, instance: nil, args: {})
       @client = client
       @zone = zone
       @identity = identity
       @instance = instance
 
+      load if identity && instance.nil?
+
       # TODO: Following parameters should be in separate attribute class
       # https://github.com/stejskalleos/foreman_google/issues/21
-      @name = parameterize_name(args[:name])
-      @hostname = @name
-      @machine_type = args[:machine_type]
-      @network_interfaces = construct_network(args[:network] || 'default', args[:associate_external_ip] || '0', args[:network_interfaces] || [])
-      @image_id = args[:image_id]
-      @volumes = construct_volumes(args[:image_id], args[:volumes])
-      @metadata = construct_metadata(args[:user_data])
-
-      load if identity && !!!instance
+      if @instance
+        load_instance_vars
+      else
+        load_new_vars(args)
+      end
     end
-    # rubocop:enable Metrics/AbcSize
 
     def persisted?
       !!identity
@@ -105,6 +101,27 @@ module ForemanGoogle
       @instance.machine_type.split('/').last
     end
 
+    def public_ip_address
+      return unless @instance.network_interfaces.any?
+
+      @instance.network_interfaces.first.access_configs.first.nat_i_p
+    end
+
+    def private_ip_address
+      return unless @instance.network_interfaces.any?
+
+      @instance.network_interfaces.first.network_i_p
+    end
+
+    def pretty_image_name
+      return unless @instance.disks.any?
+
+      disk_name = @instance.disks.first.device_name
+      image_name = @client.disk(@zone_name, disk_name).source_image
+
+      image_name.split('/').last
+    end
+
     private
 
     def load
@@ -160,6 +177,27 @@ module ForemanGoogle
       { items: [{ key: 'user-data', value: user_data }] }
     end
 
+    def load_instance_vars
+      @name = @instance.name
+      @hostname = @name
+      @creation_timestamp = @instance.creation_timestamp.to_datetime
+      @zone_name = @instance.zone.split('/').last
+      @machine_type = @instance.machine_type
+      @network_interfaces = @instance.network_interfaces
+      @volumes = @instance.disks
+      @metadata = @instance.metadata
+    end
+
+    def load_new_vars(args)
+      @name = parameterize_name(args[:name])
+      @hostname = @name
+      @machine_type = args[:machine_type]
+      @network_interfaces = construct_network(args[:network] || 'default', args[:associate_external_ip] || '0', args[:network_interfaces] || [])
+      @image_id = args[:image_id]
+      @volumes = construct_volumes(args[:image_id], args[:volumes])
+      @metadata = construct_metadata(args[:user_data])
+    end
+
     def wait_for
       timeout = 60
       duration = 0
@@ -177,4 +215,4 @@ module ForemanGoogle
     end
   end
 end
-# rubocop:enable Metrics/ClassLength, Metrics/MethodLength
+# rubocop:enable Metrics/ClassLength

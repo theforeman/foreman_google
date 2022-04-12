@@ -12,8 +12,12 @@ module ForemanGoogle
 
     describe '#find_vm_by_uuid' do
       it 'does query gce' do
-        instance = stub(status: 'RUNNING')
+        instance = stub status: 'RUNNING', name: 'eee',
+          zone: '/test/us-east1-b', network_interfaces: [], disks: [],
+          metadata: nil, machine_type: 'micro-e2', creation_timestamp: Time.zone.now
+
         service.expects(:instance).with(subject.zone, 'instance_name').returns(instance)
+
         compute = subject.find_vm_by_uuid('instance_name')
         value(compute).must_be_kind_of(ForemanGoogle::GoogleCompute)
       end
@@ -29,7 +33,9 @@ module ForemanGoogle
     end
 
     describe '#vms' do
-      let(:instances) { [OpenStruct.new(name: 'instance1'), OpenStruct.new(name: 'instance2')] }
+      let(:instances) do
+        Array.new(2) { |i| OpenStruct.new(name: "instance#{i}", creation_timestamp: Time.zone.now, zone: '/test/us-east1-b') }
+      end
 
       setup do
         service.expects(:instances).returns(instances)
@@ -40,7 +46,7 @@ module ForemanGoogle
       end
 
       it 'all method' do
-        subject.vms.each_with_index { |instance, i| assert instance.name, instances[i].name }
+        subject.vms.all.each_with_index { |instance, i| assert instance.name, instances[i].name }
       end
     end
   end

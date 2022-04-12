@@ -40,19 +40,20 @@ module ForemanGoogle
     end
 
     describe '#ready?' do
-      let(:instance) { mock('Google::Compute::Instance') }
-
-      setup do
-        client.expects(:instance).with(zone, identity).returns(instance)
-      end
-
       it 'is ready with running instance' do
-        instance.expects(:status).returns('RUNNING')
+        instance = stub status: 'RUNNING', name: 'eee',
+          zone: '/test/us-east1-b', network_interfaces: [], disks: [],
+          metadata: nil, machine_type: 'micro-e2', creation_timestamp: Time.zone.now
+        client.expects(:instance).with(zone, identity).returns(instance)
         value(subject).must_be(:ready?)
       end
 
       it 'is not ready for not running instance' do
-        instance.expects(:status).returns('PROVISIONING')
+        instance = stub status: 'PROVISIONING', name: 'eee',
+          zone: '/test/us-east1-b', network_interfaces: [], disks: [],
+          metadata: nil, machine_type: 'micro-e2', creation_timestamp: Time.zone.now
+
+        client.expects(:instance).with(zone, identity).returns(instance)
         value(subject).wont_be(:ready?)
       end
     end
@@ -153,10 +154,37 @@ module ForemanGoogle
     end
 
     it '#pretty_machine_type' do
-      instance = OpenStruct.new(machine_type: 'https://www.googleapis.com/compute/v1/projects/coastal-haven-123456/zones/us-east1-b/machineTypes/e2-micro')
-      cr = ForemanGoogle::GoogleCompute.new(client: client, zone: zone, instance: instance)
+      machine_type = 'https://www.googleapis.com/compute/v1/projects/coastal-haven-123456/zones/us-east1-b/machineTypes/e2-micro'
+      instance = OpenStruct.new(name: 'instance', machine_type: machine_type, creation_timestamp: Time.zone.now, zone: '/test/us-east1-b')
 
+      cr = ForemanGoogle::GoogleCompute.new(client: client, zone: zone, instance: instance)
       assert_equal cr.pretty_machine_type, 'e2-micro'
+    end
+
+    it '#public_ip_address' do
+      nics = [OpenStruct.new(access_configs: [OpenStruct.new(nat_i_p: '1.2.3.4')])]
+      instance = OpenStruct.new(name: 'instance', network_interfaces: nics, creation_timestamp: Time.zone.now, zone: '/test/us-east1-b')
+
+      cr = ForemanGoogle::GoogleCompute.new(client: client, zone: zone, instance: instance)
+      assert_equal cr.public_ip_address, '1.2.3.4'
+    end
+
+    it '#private_ip_address' do
+      nics = [OpenStruct.new(network_i_p: '10.10.10.23')]
+      instance = OpenStruct.new(name: 'instance', network_interfaces: nics, creation_timestamp: Time.zone.now, zone: '/test/us-east1-b')
+
+      cr = ForemanGoogle::GoogleCompute.new(client: client, zone: zone, instance: instance)
+      assert_equal cr.private_ip_address, '10.10.10.23'
+    end
+
+    it '#pretty_image_name' do
+      client.stubs(:disk).returns(OpenStruct.new(source_image: '/path/to/centos-source-image'))
+
+      disks = [OpenStruct.new(device_name: 'foreman-disk1')]
+      instance = OpenStruct.new(name: 'instance', disks: disks, creation_timestamp: Time.zone.now, zone: '/test/us-east1-b')
+
+      cr = ForemanGoogle::GoogleCompute.new(client: client, zone: zone, instance: instance)
+      assert_equal cr.pretty_image_name, 'centos-source-image'
     end
   end
 end
