@@ -5,6 +5,14 @@ module ForemanGoogle
     subject { ForemanGoogle::GCE.new(zone: 'zone', password: gauth_json) }
     let(:service) { mock('GoogleAdapter') }
 
+    let(:instance_args) do
+      nics = [OpenStruct.new(access_configs: [OpenStruct.new(nat_i_p: '1.2.3.4')], network: 'test/default', network_i_p: '10.10.10.23')]
+
+      { name: "instance-#{Time.now.to_i}", network_interfaces: nics,
+        creation_timestamp: Time.zone.now, zone: '/test/us-east1-b',
+        machine_type: 'machineTypes/e2-micro' }
+    end
+
     setup do
       subject.stubs(client: service)
       service.stubs(:project_id).returns('project_id')
@@ -12,13 +20,11 @@ module ForemanGoogle
 
     describe '#find_vm_by_uuid' do
       it 'does query gce' do
-        instance = stub status: 'RUNNING', name: 'eee',
-          zone: '/test/us-east1-b', network_interfaces: [], disks: [],
-          metadata: nil, machine_type: 'micro-e2', creation_timestamp: Time.zone.now
+        instance = OpenStruct.new(**instance_args)
 
-        service.expects(:instance).with(subject.zone, 'instance_name').returns(instance)
+        service.expects(:instance).with(subject.zone, instance.name).returns(instance)
 
-        compute = subject.find_vm_by_uuid('instance_name')
+        compute = subject.find_vm_by_uuid(instance.name)
         value(compute).must_be_kind_of(ForemanGoogle::GoogleCompute)
       end
 
@@ -34,7 +40,7 @@ module ForemanGoogle
 
     describe '#vms' do
       let(:instances) do
-        Array.new(2) { |i| OpenStruct.new(name: "instance#{i}", creation_timestamp: Time.zone.now, zone: '/test/us-east1-b') }
+        Array.new(2) { |_i| OpenStruct.new(**instance_args) }
       end
 
       setup do
