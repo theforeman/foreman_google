@@ -1,7 +1,6 @@
 module GoogleExtensions
   module AttachedDisk
     def persisted?
-      type == 'PERSISTENT'
     end
 
     def id
