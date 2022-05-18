@@ -23,7 +23,12 @@ module ForemanGoogle
 
     # Include concerns in this config.to_prepare block
     config.to_prepare do
+      require 'google/cloud/compute/v1'
+      Google::Cloud::Compute::V1::AttachedDisk.include GoogleExtensions::AttachedDisk
+
       ::ComputeResourcesController.include ForemanGoogle::TemporaryPrependPath
+      ::ComputeResourcesVmsController.include ForemanGoogle::TemporaryPrependPath
+      ::HostsController.include ForemanGoogle::TemporaryPrependPath
     rescue StandardError => e
       Rails.logger.warn "ForemanGoogle: skipping engine hook (#{e})"
     end

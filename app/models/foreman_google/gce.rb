@@ -1,6 +1,6 @@
 require 'foreman_google/google_compute_adapter'
 
-# rubocop:disable Rails/InverseOf
+# rubocop:disable Rails/InverseOf, Metrics/ClassLength
 module ForemanGoogle
   class GCE < ::ComputeResource
     has_one :key_pair, foreign_key: :compute_resource_id, dependent: :destroy
@@ -27,6 +27,7 @@ module ForemanGoogle
     end
 
     def to_label
+      "#{name} (#{zone}-#{provider_friendly_name})"
     end
 
     def capabilities
@@ -102,6 +103,8 @@ module ForemanGoogle
     end
 
     def new_volume(attrs = {})
+      default_attrs = { disk_size_gb: 20 }
+      Google::Cloud::Compute::V1::AttachedDisk.new(**attrs.merge(default_attrs))
     end
 
     def normalize_vm_attrs(vm_attrs)
@@ -119,6 +122,10 @@ module ForemanGoogle
 
     def vms(attrs = {})
       GoogleCloudCompute::ComputeCollection.new(client, zone, attrs)
+    end
+
+    def provided_attributes
+      super.merge({ ip: :public_ip_address })
     end
 
     # ----# Google specific #-----
@@ -139,6 +146,14 @@ module ForemanGoogle
     def client
       @client ||= ForemanGoogle::GoogleComputeAdapter.new(auth_json_string: password)
     end
+
+    def set_vm_volumes_attributes(vm, vm_attrs)
+      return vm_attrs unless vm.respond_to?(:volumes)
+
+      vm_attrs[:volumes_attributes] = Hash[vm.volumes.each_with_index.map { |volume, idx| [idx.to_s, volume.to_h] }]
+
+      vm_attrs
+    end
   end
 end
-# rubocop:enable Rails/InverseOf
+# rubocop:enable Rails/InverseOf, Metrics/ClassLength

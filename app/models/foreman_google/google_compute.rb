@@ -5,7 +5,7 @@ require 'google/apis/compute_v1'
 module ForemanGoogle
   class GoogleCompute
     attr_reader :identity, :name, :hostname, :creation_timestamp, :machine_type, :network_interfaces, :volumes,
-      :associate_external_ip, :zone_name, :image_id, :disks, :metadata
+      :associate_external_ip, :network, :zone_name, :image_id, :disks, :metadata
 
     def initialize(client:, zone:, identity: nil, instance: nil, args: {})
       @client = client
@@ -98,13 +98,14 @@ module ForemanGoogle
     end
 
     def pretty_machine_type
+      return unless @instance
       @instance.machine_type.split('/').last
     end
 
     def public_ip_address
       return unless @instance.network_interfaces.any?
 
-      @instance.network_interfaces.first.access_configs.first.nat_i_p
+      @instance.network_interfaces.first.access_configs.first&.nat_i_p
     end
 
     def private_ip_address
@@ -120,6 +121,9 @@ module ForemanGoogle
       image_name = @client.disk(@zone_name, disk_name).source_image
 
       image_name.split('/').last
+    end
+
+    def volumes_attributes=(_attrs)
     end
 
     private
@@ -158,9 +162,12 @@ module ForemanGoogle
     end
 
     def construct_volumes(image_id, volumes = [])
-      return [] if volumes.empty?
+      return [Google::Cloud::Compute::V1::AttachedDisk.new(disk_size_gb: 20)] if volumes.empty?
       image = load_image(image_id)
 
+      # TODO: Bug, google has disk_size_gb, not size_gb
+      # TODO: Should return array of Google::Cloud::Compute::V1::AttachedDisk
+      #       when creating new host for compute resource
       new_vol_attrs = volumes.map.with_index do |vol_attrs, i|
         { name: "#{@name}-disk#{i + 1}",
           size_gb: vol_attrs[:size_gb]&.to_i }
@@ -177,16 +184,19 @@ module ForemanGoogle
       { items: [{ key: 'user-data', value: user_data }] }
     end
 
+    # rubocop:disable Metrics/AbcSize
     def load_instance_vars
       @name = @instance.name
       @hostname = @name
       @creation_timestamp = @instance.creation_timestamp.to_datetime
       @zone_name = @instance.zone.split('/').last
       @machine_type = @instance.machine_type
+      @network = @instance.network_interfaces[0].network.split('/').last
       @network_interfaces = @instance.network_interfaces
       @volumes = @instance.disks
       @metadata = @instance.metadata
     end
+    # rubocop:enable Metrics/AbcSize
 
     def load_new_vars(args)
       @name = parameterize_name(args[:name])
