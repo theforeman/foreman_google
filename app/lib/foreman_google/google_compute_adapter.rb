@@ -1,6 +1,6 @@
 require 'google-cloud-compute'
 
-# rubocop:disable Rails/SkipsModelValidations
+# rubocop:disable Rails/SkipsModelValidations, Metrics/ClassLength
 module ForemanGoogle
   class GoogleComputeAdapter
     def initialize(auth_json_string:)
@@ -48,6 +48,10 @@ module ForemanGoogle
       manage_instance(:stop, zone: zone, instance: instance_identity)
     end
 
+    def delete_instance(zone, instance_identity)
+      manage_instance(:delete, zone: zone, instance: instance_identity)
+    end
+
     # Setting filter to '(deprecated.state != "DEPRECATED") AND (deprecated.state != "OBSOLETE")'
     # doesn't work and returns empty array, no idea what is happening there
     def images(filter: nil)
@@ -62,6 +66,10 @@ module ForemanGoogle
 
     def disk(zone, name)
       get('disks', disk: name, zone: zone)
+    end
+
+    def disks(zone)
+      list('disks', zone: zone)
     end
 
     def delete_disk(zone, disk_name)
@@ -136,4 +144,4 @@ module ForemanGoogle
     end
   end
 end
-# rubocop:enable Rails/SkipsModelValidations
+# rubocop:enable Rails/SkipsModelValidations, Metrics/ClassLength
