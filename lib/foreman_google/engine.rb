@@ -29,6 +29,7 @@ module ForemanGoogle
       ::ComputeResourcesController.include ForemanGoogle::TemporaryPrependPath
       ::ComputeResourcesVmsController.include ForemanGoogle::TemporaryPrependPath
       ::HostsController.include ForemanGoogle::TemporaryPrependPath
+      ::Host::Managed.include ForemanGoogle::HostManagedExtensions
     rescue StandardError => e
       Rails.logger.warn "ForemanGoogle: skipping engine hook (#{e})"
     end

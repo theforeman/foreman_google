@@ -124,8 +124,8 @@ module ForemanGoogle
         cr = ForemanGoogle::GoogleCompute.new(client: client, zone: zone, args: args)
         volume = cr.volumes.first
 
-        assert_equal volume[:name], "#{cr.name}-disk1"
-        assert_nil volume[:source_image]
+        assert_equal volume.device_name, "#{cr.name}-disk1"
+        assert_empty volume.source
       end
 
       it 'image not found' do
@@ -138,20 +138,24 @@ module ForemanGoogle
         cr = ForemanGoogle::GoogleCompute.new(client: client, zone: zone, args: args)
 
         volume = cr.volumes.first
-        assert_equal volume[:source_image], 'test-self-link'
+        assert_equal volume.source, 'test-self-link'
       end
     end
 
     describe '#metadata' do
+      let(:ssh_attrs) { { username: 'gce_user', public_key: 'public_key' } }
+
       it 'with user_data' do
-        args = { user_data: 'test' }
+        args = ssh_attrs.merge({ user_data: 'test' })
         cr = ForemanGoogle::GoogleCompute.new(client: client, zone: zone, args: args)
-        assert_equal cr.metadata, { items: [{ key: 'user-data', value: 'test' }] }
+
+        assert_includes cr.metadata[:items], { key: 'user-data', value: 'test' }
+        assert_includes cr.metadata[:items], { key: 'ssh-keys', value: 'gce_user:public_key' }
       end
 
       it 'no user_data' do
-        cr = ForemanGoogle::GoogleCompute.new(client: client, zone: zone)
-        assert_nil cr.metadata
+        cr = ForemanGoogle::GoogleCompute.new(client: client, zone: zone, args: ssh_attrs)
+        assert_equal cr.metadata, { items: [{ key: 'ssh-keys', value: 'gce_user:public_key' }] }
       end
     end
 
@@ -160,9 +164,9 @@ module ForemanGoogle
       assert_equal cr.pretty_machine_type, 'e2-micro'
     end
 
-    it '#public_ip_address' do
+    it '#vm_ip_address' do
       cr = ForemanGoogle::GoogleCompute.new(client: client, zone: zone, instance: instance)
-      assert_equal cr.public_ip_address, '1.2.3.4'
+      assert_equal cr.vm_ip_address, '1.2.3.4'
     end
 
     it '#private_ip_address' do

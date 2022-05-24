@@ -135,6 +135,9 @@ module ForemanGoogle
         stub_request(:post, 'https://compute.googleapis.com/compute/v1/projects/coastal-haven-123456/zones/us-east1-b/instances')
           .to_return(status: 200, body: File.read(File.join(__dir__, '..', '..', 'fixtures', 'instance_insert.json')))
 
+        stub_request(:get, 'https://compute.googleapis.com/compute/v1/projects/coastal-haven-123456/zones/us-east1-b/operations/6200725776819157246')
+          .to_return(status: 200, body: File.read(File.join(__dir__, '..', '..', 'fixtures', 'operation_get.json')))
+
         args = {
           name: 'foreman-test',
           machine_type: 'zones/us-east1-b/machineTypes/e2-micro',
@@ -146,6 +149,23 @@ module ForemanGoogle
 
         assert 'insert', result.operation.operation_type
         assert_includes result.operation.target_link, 'foreman-test-google'
+      end
+
+      it '#insert with error' do
+        stub_request(:post, 'https://compute.googleapis.com/compute/v1/projects/coastal-haven-123456/zones/us-east1-b/instances')
+          .to_return(status: 200, body: File.read(File.join(__dir__, '..', '..', 'fixtures', 'instance_insert.json')))
+
+        stub_request(:get, 'https://compute.googleapis.com/compute/v1/projects/coastal-haven-123456/zones/us-east1-b/operations/6200725776819157246')
+          .to_return(status: 200, body: File.read(File.join(__dir__, '..', '..', 'fixtures', 'operation_error.json')))
+
+        args = {
+          name: 'foreman-test',
+          machine_type: 'zones/us-east1-b/machineTypes/e2-micro',
+          disks: [{ source: 'zones/us-east1-b/disks/foreman-test-disk1', boot: true }],
+          network_interfaces: [{ network: 'global/networks/default' }],
+        }
+
+        value { subject.insert_instance('us-east1-b', args) }.must_raise(::Google::Cloud::Error)
       end
 
       it '#start' do

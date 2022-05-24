@@ -96,12 +96,13 @@ module ForemanGoogle
 
       vm = new_vm(args.merge(ssh_args))
       vm.create_volumes
-      vm.wait_for_volumes
       vm.create_instance
       vm.set_disk_auto_delete
+
+      find_vm_by_uuid vm.hostname
     rescue ::Google::Cloud::Error => e
-      Foreman::Logging.exception('Unhandled Google Compute Engine error', e)
       vm.destroy_volumes
+      raise Foreman::WrappedException.new(e, 'Cannot insert instance!')
     end
 
     def vm_options(args)
@@ -143,7 +144,7 @@ module ForemanGoogle
     end
 
     def provided_attributes
-      super.merge({ ip: :public_ip_address })
+      super.merge({ ip: :vm_ip_address })
     end
 
     # ----# Google specific #-----
@@ -157,6 +158,13 @@ module ForemanGoogle
 
       key = ::SSHKey.generate
       build_key_pair name: "foreman-#{id}#{Foreman.uuid}", secret: key.private_key, public: key.ssh_public_key
+    end
+
+    def vm_ready(vm)
+      vm.wait_for do
+        vm.reload
+        vm.ready?
+      end
     end
 
     private
