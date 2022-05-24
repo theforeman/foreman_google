@@ -126,6 +126,10 @@ module ForemanGoogle
     def volumes_attributes=(_attrs)
     end
 
+    def serial_port_output
+      @client.serial_port_output(@zone, @identity)&.contents
+    end
+
     private
 
     def load
