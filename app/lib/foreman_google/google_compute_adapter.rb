@@ -78,6 +78,10 @@ module ForemanGoogle
       end
     end
 
+    def serial_port_output(zone, instance_identity)
+      manage_instance(:get_serial_port_output, zone: zone, instance: instance_identity)
+    end
+
     private
 
     def list(resource_name, **opts)

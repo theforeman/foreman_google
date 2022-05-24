@@ -111,6 +111,17 @@ module ForemanGoogle
     end
 
     def console(uuid)
+      vm = find_vm_by_uuid(uuid)
+
+      if vm.ready?
+        {
+          'output' => vm.serial_port_output, 'timestamp' => Time.now.utc,
+          :type => 'log', :name => vm.name
+        }
+      else
+        raise ::Foreman::Exception,
+          N_('console is not available at this time because the instance is powered off')
+      end
     end
 
     def associated_host(vm)
