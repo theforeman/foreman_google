@@ -114,6 +114,7 @@ module ForemanGoogle
     end
 
     def associated_host(vm)
+      associate_by('ip', [vm.public_ip_address, vm.private_ip_address])
     end
 
     def available_images(filter: nil)
@@ -121,7 +122,8 @@ module ForemanGoogle
     end
 
     def vms(attrs = {})
-      GoogleCloudCompute::ComputeCollection.new(client, zone, attrs)
+      filtered_attrs = attrs.except(:eager_loading)
+      GoogleCloudCompute::ComputeCollection.new(client, zone, filtered_attrs)
     end
 
     def provided_attributes
