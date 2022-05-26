@@ -32,9 +32,9 @@ module ForemanGoogle
         service
           .expects(:instance)
           .with(subject.zone, 'non-existing-name-or-id')
-          .raises(Foreman::WrappedException.new(Google::Cloud::NotFoundError.new, 'not found'))
+          .raises(ActiveRecord::RecordNotFound)
 
-        value { subject.find_vm_by_uuid('non-existing-name-or-id') }.must_raise(Foreman::WrappedException)
+        value { subject.find_vm_by_uuid('non-existing-name-or-id') }.must_raise(ActiveRecord::RecordNotFound)
       end
     end
 
