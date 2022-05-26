@@ -84,6 +84,11 @@ module ForemanGoogle
     end
 
     def destroy_vm(uuid)
+      client.set_disk_auto_delete(zone, uuid)
+      client.delete_instance(zone, uuid)
+    rescue ActiveRecord::RecordNotFound
+      # if the VM does not exists, we don't really care.
+      true
     end
 
     def create_vm(args = {})

@@ -34,6 +34,17 @@ module ForemanGoogle
       end
     end
 
+    describe '#instance - not found' do
+      setup do
+        stub_request(:get, 'https://compute.googleapis.com/compute/v1/projects/coastal-haven-123456/zones/us-east1-b/instances/not-existing-instance')
+          .to_raise(Google::Cloud::NotFoundError)
+      end
+
+      it 'should raise an error' do
+        value { subject.instance('us-east1-b', 'not-existing-instance') }.must_raise(ActiveRecord::RecordNotFound)
+      end
+    end
+
     describe '#instances' do
       setup do
         stub_request(:get, 'https://compute.googleapis.com/compute/v1/projects/coastal-haven-123456/zones/us-east1-b/instances')
