@@ -2,12 +2,10 @@
 #
 # This file is distributed under the same license as foreman_google.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: version 0.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-08-20 08:46+0100\n"
 "PO-Revision-Date: 2014-08-20 08:54+0100\n"
 "Last-Translator: Foreman Team <foreman-dev@googlegroups.com>\n"
 "Language-Team: Foreman Team <foreman-dev@googlegroups.com>\n"
@@ -17,3 +15,80 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+msgid "Action with sub plans"
+msgstr ""
+
+msgid "Actions"
+msgstr ""
+
+msgid "Associate Ephemeral External IP"
+msgstr ""
+
+msgid "Does this image support user data input (e.g. via cloud-init)?"
+msgstr ""
+
+msgid "Google Compute Engine plugin for the Foreman."
+msgstr ""
+
+msgid "Image"
+msgstr ""
+
+msgid "Import Puppet classes"
+msgstr ""
+
+msgid "Import facts"
+msgstr ""
+
+msgid "JSON key"
+msgstr ""
+
+msgid "Load Zones"
+msgstr ""
+
+msgid "Machine Type"
+msgstr ""
+
+msgid "Machine type"
+msgstr ""
+
+msgid "Missing an image for operating system!"
+msgstr ""
+
+msgid "Name"
+msgstr ""
+
+msgid "Network"
+msgstr ""
+
+msgid "Please select an image"
+msgstr ""
+
+msgid "Preupgrade job"
+msgstr ""
+
+msgid "Properties"
+msgstr ""
+
+msgid "Remote action:"
+msgstr ""
+
+msgid "Size (GB)"
+msgstr ""
+
+msgid "State"
+msgstr ""
+
+msgid "The user that is used to ssh into the instance, normally cloud-user, ec2-user, ubuntu, etc. Note: Google engine doesn't support SSH for the root user."
+msgstr ""
+
+msgid "Type"
+msgstr ""
+
+msgid "Zone"
+msgstr ""
+
+msgid "console is not available at this time because the instance is powered off"
+msgstr ""
+
+msgid "selected image does not exist"
+msgstr ""
