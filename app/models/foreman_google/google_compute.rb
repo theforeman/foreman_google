@@ -1,7 +1,5 @@
 require 'google/apis/compute_v1'
 
-# TODO: enable back after https://github.com/stejskalleos/foreman_google/issues/21
-# rubocop:disable Metrics/ClassLength
 module ForemanGoogle
   class GoogleCompute
     attr_reader :identity, :name, :hostname, :creation_timestamp, :machine_type, :network_interfaces, :volumes,
@@ -14,14 +12,7 @@ module ForemanGoogle
       @instance = instance
 
       load if identity && instance.nil?
-
-      # TODO: Following parameters should be in separate attribute class
-      # https://github.com/stejskalleos/foreman_google/issues/21
-      if @instance
-        load_instance_vars
-      else
-        load_new_vars(args)
-      end
+      load_attributes(args)
     end
 
     def persisted?
@@ -56,7 +47,7 @@ module ForemanGoogle
     end
 
     def to_s
-      @instance&.name
+      @name
     end
 
     def interfaces
@@ -77,14 +68,7 @@ module ForemanGoogle
     end
 
     def create_instance
-      args = {
-        name: @name,
-        machine_type: "zones/#{@zone}/machineTypes/#{@machine_type}",
-        disks: @volumes.map.with_index { |vol, i| { source: "zones/#{@zone}/disks/#{vol.device_name}", boot: i.zero? } },
-        network_interfaces: @network_interfaces,
-        metadata: @metadata,
-      }
-
+      args = GoogleCloudCompute::ComputeAttributes.new(@client).for_create(self)
       @client.insert_instance(@zone, args)
     end
 
@@ -144,86 +128,10 @@ module ForemanGoogle
       @instance = @client.instance(@zone.split('/').last, identity)
     end
 
-    def parameterize_name(name)
-      name&.parameterize || "foreman-#{Time.now.to_i}"
-    end
-
-    def construct_network(network_name, associate_external_ip, network_interfaces)
-      # handle network_interface for external ip
-      # assign  ephemeral external IP address using associate_external_ip
-      if associate_external_ip
-        network_interfaces = [{ network: 'global/networks/default' }] if network_interfaces.empty?
-        access_config = { name: 'External NAT', type: 'ONE_TO_ONE_NAT' }
-
-        # Note - no support for external_ip from foreman
-        # access_config[:nat_ip] = external_ip if external_ip
-        network_interfaces[0][:access_configs] = [access_config]
-        return network_interfaces
-      end
-
-      network = "https://compute.googleapis.com/compute/v1/projects/#{@client.project_id}/global/networks/#{network_name}"
-      [{ network: network }]
-    end
-
-    def load_image(image_id)
-      return unless image_id
-
-      image = @client.images.find { |img| img.id == image_id.to_i }
-      raise ::Foreman::Exception, N_('selected image does not exist') if image.nil?
-      image
-    end
-
-    def construct_volumes(image_id, volumes = [])
-      return [Google::Cloud::Compute::V1::AttachedDisk.new(disk_size_gb: 20)] if volumes.empty?
-
-      image = load_image(image_id)
-
-      attached_disks = volumes.map.with_index do |vol_attrs, i|
-        name = "#{@name}-disk#{i + 1}"
-        size = (vol_attrs[:size_gb] || vol_attrs[:disk_size_gb]).to_i
-
-        Google::Cloud::Compute::V1::AttachedDisk.new(device_name: name, disk_size_gb: size)
-      end
-
-      attached_disks.first.source = image&.self_link if image&.self_link
-      attached_disks
-    end
-
-    # Note - GCE only supports cloud-init for Container Optimized images and
-    # for custom images with cloud-init setup
-    def construct_metadata(args)
-      ssh_keys = { key: 'ssh-keys', value: "#{args[:username]}:#{args[:public_key]}" }
-
-      return { items: [ssh_keys] } if args[:user_data].blank?
-
-      { items: [ssh_keys, { key: 'user-data', value: args[:user_data] }] }
-    end
-
-    # rubocop:disable Metrics/AbcSize
-    def load_instance_vars
-      @name = @instance.name
-      @hostname = @name
-      @creation_timestamp = @instance.creation_timestamp.to_datetime
-      @zone_name = @instance.zone.split('/').last
-      @machine_type = @instance.machine_type
-      @network = @instance.network_interfaces[0].network.split('/').last
-      @network_interfaces = @instance.network_interfaces
-      @volumes = @instance.disks
-      @metadata = @instance.metadata
-    end
-    # rubocop:enable Metrics/AbcSize
-
-    def load_new_vars(args)
-      @name = parameterize_name(args[:name])
-      @hostname = @name
-      @machine_type = args[:machine_type]
-      @network = args[:network] || 'default'
-      @associate_external_ip = ActiveModel::Type::Boolean.new.cast(args[:associate_external_ip])
-      @network_interfaces = construct_network(@network, @associate_external_ip, args[:network_interfaces] || [])
-      @image_id = args[:image_id]
-      @volumes = construct_volumes(args[:image_id], args[:volumes])
-      @metadata = construct_metadata(args)
+    def load_attributes(args_for_new)
+      klass = GoogleCloudCompute::ComputeAttributes.new(@client)
+      attrs = @instance ? klass.for_instance(@instance) : klass.for_new(args_for_new)
+      attrs.each { |name, value| instance_variable_set("@#{name}", value) }
     end
   end
 end
-# rubocop:enable Metrics/ClassLength
