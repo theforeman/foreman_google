@@ -1,14 +1,24 @@
+# rubocop:disable Metrics/MethodLength
 class ForemanGceToForemanGoogleGce < ActiveRecord::Migration[6.0]
   def up
     User.without_auditing do
-      old_type = 'Foreman::Model::GCE'
+      original_type = 'Foreman::Model::GCE'
       new_type = 'ForemanGoogle::GCE'
-      compute_resources = ComputeResource.unscoped.where(type: old_type)
 
-      compute_resources.each do |cr|
+      # First update the type to avoid error:
+      # ActiveRecord::SubclassNotFound: The single-table inheritance
+      # mechanism failed to locate the subclass: 'Foreman::Model::GCE'
+      ComputeResource.unscoped.where(type: original_type).update_all(type: new_type)
+
+      ComputeResource.unscoped.where(type: new_type).each do |cr|
+        unless cr.attrs[:key_path]
+          say("Compute resource [#{cr.name}] is missing path to JSON key file, can't load the data. Please update the resource manually.")
+          next
+        end
         json_data = File.read(cr.attrs[:key_path])
-        cr.update(type: new_type, password: json_data)
+        cr.update(password: json_data)
       end
     end
   end
 end
+# rubocop:enable Metrics/MethodLength
