@@ -1,2 +1,2 @@
 # Matches foreman_google.gemspec
-_('TODO: Description of ForemanGoogle.')
+_('Google Compute Engine plugin for the Foreman.')

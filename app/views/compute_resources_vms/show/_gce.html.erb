@@ -7,15 +7,15 @@
     </thead>
     <tbody>
       <%= prop :state %>
-      <%= prop :pretty_machine_type, "Machine Type" %>
-      <%= prop :zone_name, "Zone" %>
+      <%= prop :pretty_machine_type, _("Machine Type") %>
+      <%= prop :zone_name, _("Zone") %>
       <tr>
         <td>Created</td>
         <td><%= date_time_relative(@vm.creation_timestamp) %></td>
       </tr>
       <%= prop :private_ip_address %>
       <%= prop :public_ip_address %>
-      <%= prop :pretty_image_name, "Image" %>
+      <%= prop :pretty_image_name, _("Image") %>
     </tbody>
   </table>
 </div>
