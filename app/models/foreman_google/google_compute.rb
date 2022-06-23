@@ -102,6 +102,8 @@ module ForemanGoogle
 
       @instance.network_interfaces.first.access_configs.first&.nat_i_p
     end
+    alias_method :public_ip_address, :vm_ip_address
+
 
     def private_ip_address
       return unless @instance.network_interfaces.any?
