@@ -104,7 +104,6 @@ module ForemanGoogle
     end
     alias_method :public_ip_address, :vm_ip_address
 
-
     def private_ip_address
       return unless @instance.network_interfaces.any?
 
