@@ -134,11 +134,11 @@ module ForemanGoogle
       end
 
       it 'with source_image' do
-        args = { volumes: [{ size_gb: '23', source_image: 'centos-stream-8-v20220317' }], image_id: '1' }
+        args = { volumes: Array.new(2, { size_gb: '23', source_image: 'centos-stream-8-v20220317' }), image_id: '1' }
         cr = ForemanGoogle::GoogleCompute.new(client: client, zone: zone, args: args)
 
-        volume = cr.volumes.first
-        assert_equal volume.source, 'test-self-link'
+        assert_equal cr.volumes[0].source, 'test-self-link'
+        assert_equal cr.volumes[1].source, ''
       end
     end
 

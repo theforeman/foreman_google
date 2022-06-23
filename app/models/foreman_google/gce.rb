@@ -92,9 +92,9 @@ module ForemanGoogle
     end
 
     def create_vm(args = {})
-      ssh_args = { username: images.find_by(uuid: args[:image_id])&.username, public_key: key_pair.public }
-
+      ssh_args = { username: find_os_image(args[:image_id])&.username, public_key: key_pair.public }
       vm = new_vm(args.merge(ssh_args))
+
       vm.create_volumes
       vm.create_instance
       vm.set_disk_auto_delete
@@ -179,6 +179,12 @@ module ForemanGoogle
       vm_attrs[:volumes_attributes] = Hash[vm.volumes.each_with_index.map { |volume, idx| [idx.to_s, volume.to_h] }]
 
       vm_attrs
+    end
+
+    def find_os_image(uuid)
+      os_image = images.find_by(uuid: uuid)
+      raise ::Foreman::Exception, N_('Missing an image for operating system!') if os_image.nil?
+      os_image
     end
   end
 end

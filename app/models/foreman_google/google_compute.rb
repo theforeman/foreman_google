@@ -65,9 +65,7 @@ module ForemanGoogle
 
     def create_volumes
       @volumes.each do |vol|
-        vol_attrs = { name: vol.device_name, size_gb: vol.disk_size_gb, source_image: vol.source }
-
-        @client.insert_disk(@zone, vol_attrs)
+        @client.insert_disk(@zone, vol.insert_attrs)
         wait_for { @client.disk(@zone, vol.device_name).status == 'READY' }
       end
     end

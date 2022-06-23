@@ -55,5 +55,11 @@ module ForemanGoogle
         subject.vms.all.each_with_index { |instance, i| assert instance.name, instances[i].name }
       end
     end
+
+    describe '#create_vm' do
+      it 'without OS image' do
+        value { subject.create_vm({ image_id: 0 }) }.must_raise(::Foreman::Exception)
+      end
+    end
   end
 end
