@@ -169,8 +169,10 @@ module ForemanGoogle
       image
     end
 
+    # rubocop:disable Metrics/AbcSize
     def construct_volumes(image_id, volumes = [])
-      return [Google::Cloud::Compute::V1::AttachedDisk.new(disk_size_gb: 20)] if volumes.empty?
+      type = "projects/#{@client.project_id}/zones/#{@zone}/diskTypes/pd-balanced"
+      return [Google::Cloud::Compute::V1::AttachedDisk.new(disk_size_gb: 20, type: type)] if volumes.empty?
 
       image = load_image(image_id)
 
@@ -178,12 +180,13 @@ module ForemanGoogle
         name = "#{@name}-disk#{i + 1}"
         size = (vol_attrs[:size_gb] || vol_attrs[:disk_size_gb]).to_i
 
-        Google::Cloud::Compute::V1::AttachedDisk.new(device_name: name, disk_size_gb: size)
+        Google::Cloud::Compute::V1::AttachedDisk.new(device_name: name, disk_size_gb: size, type: type)
       end
 
       attached_disks.first.source = image&.self_link if image&.self_link
       attached_disks
     end
+    # rubocop:enable Metrics/AbcSize
 
     # Note - GCE only supports cloud-init for Container Optimized images and
     # for custom images with cloud-init setup
