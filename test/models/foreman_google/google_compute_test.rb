@@ -114,9 +114,9 @@ module ForemanGoogle
 
       it 'no volumes' do
         cr = ForemanGoogle::GoogleCompute.new(client: client, zone: zone)
-        volumes = [Google::Cloud::Compute::V1::AttachedDisk.new(disk_size_gb: 20)]
 
-        assert_equal cr.volumes, volumes
+        assert_equal 20, cr.volumes.first.disk_size_gb
+        assert_equal 'projects/project_id/zones/zone-1/diskTypes/pd-balanced', cr.volumes.first.type
       end
 
       it 'without image_id' do

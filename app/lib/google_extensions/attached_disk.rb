@@ -10,7 +10,7 @@ module GoogleExtensions
     end
 
     def insert_attrs
-      attrs = { name: device_name, size_gb: disk_size_gb }
+      attrs = { name: device_name, size_gb: disk_size_gb, type: type }
       attrs[:source_image] = source if source.present?
       attrs
     end
