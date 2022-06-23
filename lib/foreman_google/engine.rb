@@ -28,6 +28,7 @@ module ForemanGoogle
 
       ::ComputeResourcesController.include ForemanGoogle::TemporaryPrependPath
       ::ComputeResourcesVmsController.include ForemanGoogle::TemporaryPrependPath
+      ::ImagesController.include ForemanGoogle::TemporaryPrependPath
       ::HostsController.include ForemanGoogle::TemporaryPrependPath
       ::Host::Managed.include ForemanGoogle::HostManagedExtensions
     rescue StandardError => e
