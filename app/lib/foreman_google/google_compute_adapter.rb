@@ -14,7 +14,18 @@ module ForemanGoogle
     # ------ RESOURCES ------
 
     def insert_instance(zone, attrs = {})
-      resource_client('instances').insert(project: project_id, zone: zone, instance_resource: attrs)
+      response = resource_client('instances').insert(project: project_id, zone: zone, instance_resource: attrs)
+      operation_attrs = { zone: zone, operation: response.operation.id.to_s }
+
+      wait_for do
+        get('zone_operations', operation_attrs).status == :DONE
+      end
+
+      e = get('zone_operations', operation_attrs).error
+
+      return response unless e
+
+      raise ::Google::Cloud::Error, e.errors.first.message
     end
 
     # Returns an Google::Instance identified by instance_identity within given zone.
@@ -84,6 +95,23 @@ module ForemanGoogle
 
     def serial_port_output(zone, instance_identity)
       manage_instance(:get_serial_port_output, zone: zone, instance: instance_identity)
+    end
+
+    def wait_for
+      timeout = 60
+      duration = 0
+      start = Time.zone.now
+
+      loop do
+        break if yield
+
+        raise "The specified wait_for timeout (#{timeout} seconds) was exceeded" if duration > timeout
+
+        sleep(1)
+        duration = Time.zone.now - start
+      end
+
+      { duration: duration }
     end
 
     private

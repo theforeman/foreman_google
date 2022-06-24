@@ -64,20 +64,15 @@ module ForemanGoogle
     end
 
     def create_volumes
-      @volumes.each do |volume|
-        @client.insert_disk(@zone, volume)
-      end
-    end
-
-    def wait_for_volumes
-      @volumes.each do |disk|
-        wait_for { @client.disk(@zone, disk[:name]).status == 'READY' }
+      @volumes.each do |vol|
+        @client.insert_disk(@zone, vol.insert_attrs)
+        wait_for { @client.disk(@zone, vol.device_name).status == 'READY' }
       end
     end
 
     def destroy_volumes
-      @volumes.each do |disk|
-        @client.delete_disk(@zone, disk[:name])
+      @volumes.each do |volume|
+        @client.delete_disk(@zone, volume.device_name)
       end
     end
 
@@ -85,7 +80,7 @@ module ForemanGoogle
       args = {
         name: @name,
         machine_type: "zones/#{@zone}/machineTypes/#{@machine_type}",
-        disks: @volumes.map.with_index { |vol, i| { source: "zones/#{@zone}/disks/#{vol[:name]}", boot: i.zero? } },
+        disks: @volumes.map.with_index { |vol, i| { source: "zones/#{@zone}/disks/#{vol.device_name}", boot: i.zero? } },
         network_interfaces: @network_interfaces,
         metadata: @metadata,
       }
@@ -102,11 +97,12 @@ module ForemanGoogle
       @instance.machine_type.split('/').last
     end
 
-    def public_ip_address
-      return unless @instance.network_interfaces.any?
+    def vm_ip_address
+      return if @instance.network_interfaces.empty?
 
       @instance.network_interfaces.first.access_configs.first&.nat_i_p
     end
+    alias_method :public_ip_address, :vm_ip_address
 
     def private_ip_address
       return unless @instance.network_interfaces.any?
@@ -128,6 +124,14 @@ module ForemanGoogle
 
     def serial_port_output
       @client.serial_port_output(@zone, @identity)&.contents
+    end
+
+    def ip_addresses
+      [vm_ip_address, private_ip_address]
+    end
+
+    def wait_for(&block)
+      @client.wait_for(&block)
     end
 
     private
@@ -167,25 +171,28 @@ module ForemanGoogle
 
     def construct_volumes(image_id, volumes = [])
       return [Google::Cloud::Compute::V1::AttachedDisk.new(disk_size_gb: 20)] if volumes.empty?
+
       image = load_image(image_id)
 
-      # TODO: Bug, google has disk_size_gb, not size_gb
-      # TODO: Should return array of Google::Cloud::Compute::V1::AttachedDisk
-      #       when creating new host for compute resource
-      new_vol_attrs = volumes.map.with_index do |vol_attrs, i|
-        { name: "#{@name}-disk#{i + 1}",
-          size_gb: vol_attrs[:size_gb]&.to_i }
+      attached_disks = volumes.map.with_index do |vol_attrs, i|
+        name = "#{@name}-disk#{i + 1}"
+        size = (vol_attrs[:size_gb] || vol_attrs[:disk_size_gb]).to_i
+
+        Google::Cloud::Compute::V1::AttachedDisk.new(device_name: name, disk_size_gb: size)
       end
 
-      new_vol_attrs.first[:source_image] = image&.self_link
-      new_vol_attrs
+      attached_disks.first.source = image&.self_link if image&.self_link
+      attached_disks
     end
 
     # Note - GCE only supports cloud-init for Container Optimized images and
     # for custom images with cloud-init setup
-    def construct_metadata(user_data)
-      return if user_data.blank?
-      { items: [{ key: 'user-data', value: user_data }] }
+    def construct_metadata(args)
+      ssh_keys = { key: 'ssh-keys', value: "#{args[:username]}:#{args[:public_key]}" }
+
+      return { items: [ssh_keys] } if args[:user_data].blank?
+
+      { items: [ssh_keys, { key: 'user-data', value: args[:user_data] }] }
     end
 
     # rubocop:disable Metrics/AbcSize
@@ -209,23 +216,7 @@ module ForemanGoogle
       @network_interfaces = construct_network(args[:network] || 'default', args[:associate_external_ip] || '0', args[:network_interfaces] || [])
       @image_id = args[:image_id]
       @volumes = construct_volumes(args[:image_id], args[:volumes])
-      @metadata = construct_metadata(args[:user_data])
-    end
-
-    def wait_for
-      timeout = 60
-      duration = 0
-      interval = 0.5
-
-      start = Time.zone.now
-      loop do
-        break if yield
-
-        raise "The specified wait_for timeout (#{timeout} seconds) was exceeded" if duration > timeout
-
-        sleep(interval)
-        duration = Time.zone.now - start
-      end
+      @metadata = construct_metadata(args)
     end
   end
 end
