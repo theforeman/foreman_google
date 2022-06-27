@@ -22,7 +22,7 @@ provider: Google
 Google Project ID: <your-project-id>
 Client Email: service account's email
 Certificate Path: JSON file
-Zone: select the zone you like
+Zone: select the zone you want
 ```
 * Go to _Hosts > Operating Systems_ and create new OS
 ```
