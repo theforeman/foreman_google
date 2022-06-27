@@ -3,7 +3,7 @@
 ## Initial Setup
 ### Google Cloud Platform
 * Create an account and project at [console.cloud.google.com](https://console.cloud.google.com)
-* In _API & Servicies > Credentials_ create new service account (role: `Editor`) 
+* In _API & Services > Credentials_ create new service account (role: `Editor`) 
 * On account detail page go to _Keys_ and create new `JSON` key 
 
 ### Plugin Installation

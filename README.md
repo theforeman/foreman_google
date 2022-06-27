@@ -11,7 +11,7 @@ for how to install Foreman plugins
 
 ## Usage
 * Create an account and project at [console.cloud.google.com](https://console.cloud.google.com)
-* In _API & Servicies > Credentials_ create new service account (role: `Editor`) 
+* In _API & Services > Credentials_ create new service account (role: `Editor`) 
 * On account detail page go to _Keys_ and create new `JSON` key 
 * In Foreman, go to _Infrastructure > Compute Resources_ and create Compute Resource
 ```
