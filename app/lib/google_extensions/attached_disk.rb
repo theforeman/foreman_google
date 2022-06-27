@@ -14,5 +14,9 @@ module GoogleExtensions
       attrs[:source_image] = source if source.present?
       attrs
     end
+
+    def size_gb
+      disk_size_gb
+    end
   end
 end
