@@ -97,6 +97,10 @@ module ForemanGoogle
       @instance.machine_type.split('/').last
     end
 
+    def vm_description
+      pretty_machine_type
+    end
+
     def vm_ip_address
       return if @instance.network_interfaces.empty?
 
