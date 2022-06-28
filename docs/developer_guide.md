@@ -1,8 +1,12 @@
 # Foreman Google Developer Guide
 
-⚠️⚠ WIP, feel free to contribute ⚠️⚠️
+## Initial Setup
+### Google Cloud Platform
+* Create an account and project at [console.cloud.google.com](https://console.cloud.google.com)
+* In _API & Services > Credentials_ create new service account (role: `Editor`) 
+* On account detail page go to _Keys_ and create new `JSON` key 
 
-## Plugin Installation
+### Plugin Installation
 ```shell
 # In Foreman folder:
 echo "gem 'foreman_google', path: '../foreman_google'" >> bundler.d/foreman_google.local.rb
@@ -10,16 +14,15 @@ echo "gem 'foreman_google', path: '../foreman_google'" >> bundler.d/foreman_goog
 bundle install
 ```
 
-## Setup Google Compute Resource and test data
-* Create account and project at [console.cloud.google.com](https://console.cloud.google.com)
+### Setup Google Compute Resource and test data
 * In Foreman, go to _Infrastructure > Compute Resources_ and create Compute Resource
 ```
 name: Google
 provider: Google
 Google Project ID: <your-project-id>
-Client Email: in console.cloud.google.com go to project detail > Service Accounts
-Certificate Path: In console.cloud.google.com go the the service account detail and generate the .json key file 
-Zone: select the zone
+Client Email: service account's email
+Certificate Path: JSON file
+Zone: select the zone you want
 ```
 * Go to _Hosts > Operating Systems_ and create new OS
 ```
@@ -44,3 +47,4 @@ image: centos-stream-8-v*
 ## Links
 * [Compute Engine API](https://cloud.google.com/compute/docs/reference/rest/v1/)
 * [Ruby Client for the Google Cloud Compute V1 API](https://github.com/googleapis/google-cloud-ruby/tree/main/google-cloud-compute-v1)
+

@@ -3,13 +3,25 @@
 Foreman plugin for Google Compute Engine.
 
 ## Installation
-
-See [How_to_Install_a_Plugin](http://projects.theforeman.org/projects/foreman/wiki/How_to_Install_a_Plugin)
+```shell
+foreman-installer --enable-foreman-plugin-google
+```
+Or see [Plugins documentation](https://www.theforeman.org/plugins/#2.Installation)
 for how to install Foreman plugins
 
 ## Usage
-
-*TODO: Usage here*
+* Create an account and project at [console.cloud.google.com](https://console.cloud.google.com)
+* In _API & Services > Credentials_ create new service account (role: `Editor`) 
+* On account detail page go to _Keys_ and create new `JSON` key 
+* In Foreman, go to _Infrastructure > Compute Resources_ and create Compute Resource
+```
+name: <your-name>
+provider: Google
+Google Project ID: <your-project-id>
+Client Email: service account's email
+Certificate Path: JSON file
+Zone: select the zone you want
+```
 
 ## Contributing
 
