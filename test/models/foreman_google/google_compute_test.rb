@@ -159,9 +159,15 @@ module ForemanGoogle
       end
     end
 
-    it '#pretty_machine_type' do
+    it '#pretty_machine_type - with instance' do
       cr = ForemanGoogle::GoogleCompute.new(client: client, zone: zone, instance: instance)
       assert_equal cr.pretty_machine_type, 'e2-micro'
+    end
+
+    it '#pretty_machine_type - without instance' do
+      args = { machine_type: 'high-cpu-16' }
+      cr = ForemanGoogle::GoogleCompute.new(client: client, zone: zone, args: args)
+      assert_equal cr.pretty_machine_type, args[:machine_type]
     end
 
     it '#vm_ip_address' do
@@ -180,6 +186,22 @@ module ForemanGoogle
 
       cr = ForemanGoogle::GoogleCompute.new(client: client, zone: zone, instance: instance)
       assert_equal cr.pretty_image_name, 'centos-source-image'
+    end
+
+    it '@associate_external_ip' do
+      cr = ForemanGoogle::GoogleCompute.new(client: client, zone: zone)
+      assert_not cr.associate_external_ip
+
+      cr = ForemanGoogle::GoogleCompute.new(client: client, zone: zone, args: { associate_external_ip: '1' })
+      assert cr.associate_external_ip
+    end
+
+    it '@network' do
+      cr = ForemanGoogle::GoogleCompute.new(client: client, zone: zone)
+      assert cr.network, 'default'
+
+      cr = ForemanGoogle::GoogleCompute.new(client: client, zone: zone, args: { network: 'my-network' })
+      assert cr.network, 'my-network'
     end
   end
 end

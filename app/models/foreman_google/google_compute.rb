@@ -93,7 +93,7 @@ module ForemanGoogle
     end
 
     def pretty_machine_type
-      return unless @instance
+      return @machine_type unless @instance
       @instance.machine_type.split('/').last
     end
 
@@ -147,7 +147,7 @@ module ForemanGoogle
     def construct_network(network_name, associate_external_ip, network_interfaces)
       # handle network_interface for external ip
       # assign  ephemeral external IP address using associate_external_ip
-      if ActiveModel::Type::Boolean.new.cast(associate_external_ip)
+      if associate_external_ip
         network_interfaces = [{ network: 'global/networks/default' }] if network_interfaces.empty?
         access_config = { name: 'External NAT', type: 'ONE_TO_ONE_NAT' }
 
@@ -213,7 +213,9 @@ module ForemanGoogle
       @name = parameterize_name(args[:name])
       @hostname = @name
       @machine_type = args[:machine_type]
-      @network_interfaces = construct_network(args[:network] || 'default', args[:associate_external_ip] || '0', args[:network_interfaces] || [])
+      @network = args[:network] || 'default'
+      @associate_external_ip = ActiveModel::Type::Boolean.new.cast(args[:associate_external_ip])
+      @network_interfaces = construct_network(@network, @associate_external_ip, args[:network_interfaces] || [])
       @image_id = args[:image_id]
       @volumes = construct_volumes(args[:image_id], args[:volumes])
       @metadata = construct_metadata(args)
