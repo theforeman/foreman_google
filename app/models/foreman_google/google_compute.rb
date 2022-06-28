@@ -113,7 +113,7 @@ module ForemanGoogle
     def pretty_image_name
       return unless @instance.disks.any?
 
-      disk_name = @instance.disks.first.device_name
+      disk_name = @instance.disks.first.source.split('/').last
       image_name = @client.disk(@zone_name, disk_name).source_image
 
       image_name.split('/').last
