@@ -182,7 +182,7 @@ module ForemanGoogle
 
     it '#pretty_image_name' do
       client.stubs(:disk).returns(OpenStruct.new(source_image: '/path/to/centos-source-image'))
-      instance.disks = [OpenStruct.new(device_name: 'foreman-disk1')]
+      instance.disks = [OpenStruct.new(source: 'path/to/foreman-disk1')]
 
       cr = ForemanGoogle::GoogleCompute.new(client: client, zone: zone, instance: instance)
       assert_equal cr.pretty_image_name, 'centos-source-image'
