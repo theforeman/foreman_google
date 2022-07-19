@@ -85,8 +85,12 @@ module ForemanGoogle
       true
     end
 
-    def available_images(filter: nil)
+    def available_images(filter: filter_for_images)
       client.images(filter: filter)
+    end
+
+    def filter_for_images
+      @filter_for_images ||= nil
     end
 
     def self.model_name
