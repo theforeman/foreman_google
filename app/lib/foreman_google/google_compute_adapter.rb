@@ -71,6 +71,10 @@ module ForemanGoogle
       all_images.flatten.reject(&:deprecated)
     end
 
+    def image(uuid)
+      images.find { |img| img.id == uuid }
+    end
+
     def insert_disk(zone, disk_attrs = {})
       insert('disks', zone, disk_resource: disk_attrs)
     end

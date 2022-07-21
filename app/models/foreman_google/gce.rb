@@ -165,7 +165,13 @@ module ForemanGoogle
 
     def find_os_image(uuid)
       os_image = images.find_by(uuid: uuid)
+      gce_image = client.image(uuid.to_i)
+
       raise ::Foreman::Exception, N_('Missing an image for operating system!') if os_image.nil?
+      if gce_image.nil?
+        raise ::Foreman::Exception, N_("GCE image [#{uuid.to_i}] for #{os_image.name} image not found in the cloud!")
+      end
+
       os_image
     end
   end

@@ -110,6 +110,7 @@ module ForemanGoogle
     describe '#volumes' do
       setup do
         client.stubs(:images).returns([OpenStruct.new(id: 1, name: 'coastal-image', self_link: 'test-self-link')])
+        client.stubs(:image).returns(OpenStruct.new(id: 1, name: 'coastal-image', self_link: 'test-self-link'))
       end
 
       it 'no volumes' do
@@ -126,11 +127,6 @@ module ForemanGoogle
 
         assert_equal volume.device_name, "#{cr.name}-disk1"
         assert_empty volume.source
-      end
-
-      it 'image not found' do
-        args = { volumes: [{ size_gb: '23' }], image_id: '0' }
-        value { ForemanGoogle::GoogleCompute.new(client: client, zone: zone, args: args) }.must_raise(::Foreman::Exception)
       end
 
       it 'with source_image' do
@@ -202,6 +198,16 @@ module ForemanGoogle
 
       cr = ForemanGoogle::GoogleCompute.new(client: client, zone: zone, args: { network: 'my-network' })
       assert cr.network, 'my-network'
+    end
+
+    it '@zone' do
+      cr = ForemanGoogle::GoogleCompute.new(client: client, zone: zone)
+      assert zone, cr.zone
+    end
+
+    it '@zone_name' do
+      cr = ForemanGoogle::GoogleCompute.new(client: client, zone: zone, instance: instance)
+      assert zone, cr.zone_name
     end
   end
 end

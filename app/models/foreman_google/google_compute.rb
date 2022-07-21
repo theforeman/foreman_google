@@ -3,7 +3,7 @@ require 'google/apis/compute_v1'
 module ForemanGoogle
   class GoogleCompute
     attr_reader :identity, :name, :hostname, :creation_timestamp, :machine_type, :network_interfaces, :volumes,
-      :associate_external_ip, :network, :zone_name, :image_id, :disks, :metadata
+      :associate_external_ip, :network, :zone, :zone_name, :image_id, :disks, :metadata
 
     def initialize(client:, zone:, identity: nil, instance: nil, args: {})
       @client = client

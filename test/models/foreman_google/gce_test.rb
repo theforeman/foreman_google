@@ -57,6 +57,10 @@ module ForemanGoogle
     end
 
     describe '#create_vm' do
+      setup do
+        service.expects(:image).returns(nil)
+      end
+
       it 'without OS image' do
         value { subject.create_vm({ image_id: 0 }) }.must_raise(::Foreman::Exception)
       end
