@@ -66,9 +66,7 @@ module GoogleCloudCompute
     def load_image(image_id)
       return unless image_id
 
-      image = @client.images.find { |img| img.id == image_id.to_i }
-      raise ::Foreman::Exception, N_('selected image does not exist') if image.nil?
-      image
+      @client.image(image_id.to_i)
     end
 
     def construct_volumes(vm_name, image_id, volumes = [])
