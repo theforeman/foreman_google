@@ -17,6 +17,5 @@ Gem::Specification.new do |s|
   s.test_files = Dir['test/**/*'] + Dir['webpack/**/__tests__/*.js']
 
   s.add_dependency 'google-apis-compute_v1', '~> 0.14'
-  s.add_dependency 'google-cloud-compute', '~> 0.2'
   s.add_development_dependency 'rdoc'
 end
