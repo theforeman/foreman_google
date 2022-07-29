@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: foreman_google 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-29 09:53+0200\n"
-"PO-Revision-Date: 2022-06-29 09:53+0200\n"
+"POT-Creation-Date: 2022-07-29 13:33+0200\n"
+"PO-Revision-Date: 2022-07-29 13:33+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -18,16 +18,12 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: ../app/models/foreman_google/gce.rb:129
+#: ../app/models/foreman_google/gce.rb:126
 msgid "console is not available at this time because the instance is powered off"
 msgstr ""
 
-#: ../app/models/foreman_google/gce.rb:186
+#: ../app/models/foreman_google/gce.rb:170
 msgid "Missing an image for operating system!"
-msgstr ""
-
-#: ../app/models/foreman_google/google_compute.rb:172
-msgid "selected image does not exist"
 msgstr ""
 
 #: ../app/views/compute_resources/form/_gce.html.erb:3

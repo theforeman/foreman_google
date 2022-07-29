@@ -89,6 +89,3 @@ msgstr ""
 
 msgid "console is not available at this time because the instance is powered off"
 msgstr ""
-
-msgid "selected image does not exist"
-msgstr ""
