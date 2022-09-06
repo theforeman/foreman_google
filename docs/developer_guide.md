@@ -19,8 +19,6 @@ bundle install
 ```
 name: Google
 provider: Google
-Google Project ID: <your-project-id>
-Client Email: service account's email
 Certificate Path: JSON file
 Zone: select the zone you want
 ```
