@@ -21,7 +21,7 @@ jobs:
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 2.5
+          ruby-version: 2.7
           bundler-cache: true
       - name: Run rubocop
         if: github.event_name != 'push'
@@ -42,7 +42,7 @@ jobs:
       fail-fast: false
       matrix:
         foreman-core-branch: [develop]
-        ruby-version: [2.5, 2.7]
+        ruby-version: [2.7]
         node-version: [12]
     steps:
       - run: sudo apt-get update
@@ -76,4 +76,5 @@ jobs:
       - name: Run plugin tests
         if: github.event_name != 'push'
         run: |
-          bundle exec rake test:foreman_google
+          bundle exec rake test:foreman_google -v --trace
+          bundle exec rake test TEST="test/unit/foreman/access_permissions_test.rb" -v --trace
