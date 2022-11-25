@@ -1,0 +1,96 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the foreman_google package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+# Translators:
+# NorwayFun <temuri.doghonadze@gmail.com>, 2022
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: foreman_google 1.0.0\n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: 2022-08-01 12:51+0000\n"
+"Last-Translator: NorwayFun <temuri.doghonadze@gmail.com>, 2022\n"
+"Language-Team: Georgian (https://www.transifex.com/foreman/teams/114/ka/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ka\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+
+msgid "Action with sub plans"
+msgstr "ქმედება ქვე-გეგმებით"
+
+msgid "Actions"
+msgstr "ქმედებები"
+
+msgid "Associate Ephemeral External IP"
+msgstr "ეფემერული გარე IP-ის ასოცირება"
+
+msgid "Does this image support user data input (e.g. via cloud-init)?"
+msgstr "აქვს თუ არა ამ ასლს მომხმარებლის მონაცემების ჩაწოდების მხარდაჭერა (მაგ. cloudinit)?"
+
+msgid "Google Compute Engine plugin for the Foreman."
+msgstr "Google Compute Engine -ის დამატება Foreman-ისთვის."
+
+msgid "Image"
+msgstr "ასლი"
+
+msgid "Import Puppet classes"
+msgstr "Puppet-ის კლასების შემოტანა"
+
+msgid "Import facts"
+msgstr "ფაქტების შემოტანა"
+
+msgid "JSON key"
+msgstr "JSON გასაღები"
+
+msgid "Load Zones"
+msgstr "ზონების ჩატვირთვა"
+
+msgid "Machine Type"
+msgstr "მანქანის ტიპი"
+
+msgid "Machine type"
+msgstr "მანქანის ტიპი"
+
+msgid "Missing an image for operating system!"
+msgstr "აკლია ოპერაციული სისტემის ასლი!"
+
+msgid "Name"
+msgstr "სახელი"
+
+msgid "Network"
+msgstr "ქსელი"
+
+msgid "Please select an image"
+msgstr "აირჩიეთ ასლი"
+
+msgid "Preupgrade job"
+msgstr "განახლებისწინა დავალება"
+
+msgid "Properties"
+msgstr "პარამეტრები"
+
+msgid "Remote action:"
+msgstr "დაშორებული ქმედება:"
+
+msgid "Size (GB)"
+msgstr "ზომა (გბ)"
+
+msgid "State"
+msgstr "State"
+
+msgid "The user that is used to ssh into the instance, normally cloud-user, ec2-user, ubuntu, etc. Note: Google engine doesn't support SSH for the root user."
+msgstr "მომხმარებელი, რომელიც ssh-ით შესასვლელად გამოყენება. ჩვეულებრივ გამოიყენება cloud-user, ec2-user, ubuntu და ა.შ. დაიმახსოვრეთ: Google Engine-ს root მომხმარებლის SSH გასაღებების მხარდაჭერა არ გააჩნია."
+
+msgid "Type"
+msgstr "ტიპი"
+
+msgid "Zone"
+msgstr "ზონა"
+
+msgid "console is not available at this time because the instance is powered off"
+msgstr "კონსოლი ამჟამად მიუწვდომელია. გაშვებული ასლი გამორთულია"

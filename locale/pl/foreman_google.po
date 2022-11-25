@@ -1,0 +1,99 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the foreman_google package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+# Translators:
+# sziolkow <sziolkow@gmail.com>, 2022
+# Michał Foryt <michal.foryt@gmail.com>, 2022
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: foreman_google 1.0.0\n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: 2022-08-01 12:51+0000\n"
+"Last-Translator: Michał Foryt <michal.foryt@gmail.com>, 2022\n"
+"Language-Team: Polish (https://www.transifex.com/foreman/teams/114/pl/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: pl\n"
+"Plural-Forms: nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && (n%100<12"
+" || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n%10<=9) || (n"
+"%100>=12 && n%100<=14) ? 2 : 3);\n"
+
+msgid "Action with sub plans"
+msgstr ""
+
+msgid "Actions"
+msgstr "Akcja"
+
+msgid "Associate Ephemeral External IP"
+msgstr ""
+
+msgid "Does this image support user data input (e.g. via cloud-init)?"
+msgstr "Czy obraz wspiera wejściowe dane użytkownika (np. przez cloud-init)?"
+
+msgid "Google Compute Engine plugin for the Foreman."
+msgstr ""
+
+msgid "Image"
+msgstr "Obraz"
+
+msgid "Import Puppet classes"
+msgstr ""
+
+msgid "Import facts"
+msgstr ""
+
+msgid "JSON key"
+msgstr ""
+
+msgid "Load Zones"
+msgstr ""
+
+msgid "Machine Type"
+msgstr "Typ Maszyny"
+
+msgid "Machine type"
+msgstr "Typ maszyny"
+
+msgid "Missing an image for operating system!"
+msgstr ""
+
+msgid "Name"
+msgstr "Nazwa"
+
+msgid "Network"
+msgstr "Sieć"
+
+msgid "Please select an image"
+msgstr "Proszę wybrać obraz"
+
+msgid "Preupgrade job"
+msgstr ""
+
+msgid "Properties"
+msgstr "Ustawienia"
+
+msgid "Remote action:"
+msgstr ""
+
+msgid "Size (GB)"
+msgstr "Rozmiar (GB)"
+
+msgid "State"
+msgstr "Stan"
+
+msgid "The user that is used to ssh into the instance, normally cloud-user, ec2-user, ubuntu, etc. Note: Google engine doesn't support SSH for the root user."
+msgstr ""
+
+msgid "Type"
+msgstr "Typ"
+
+msgid "Zone"
+msgstr "Strefa"
+
+msgid "console is not available at this time because the instance is powered off"
+msgstr ""

@@ -1,0 +1,99 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the foreman_google package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+# Translators:
+# Mikael Fridh <frimik@gmail.com>, 2022
+# Fredrik Wendt <fredrik@wendt.se>, 2022
+# johnny.westerlund <johnny.westerlund@gmail.com>, 2022
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: foreman_google 1.0.0\n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: 2022-08-01 12:51+0000\n"
+"Last-Translator: johnny.westerlund <johnny.westerlund@gmail.com>, 2022\n"
+"Language-Team: Swedish (Sweden) (https://www.transifex.com/foreman/teams/114/s"
+"v_SE/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: sv_SE\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Action with sub plans"
+msgstr ""
+
+msgid "Actions"
+msgstr "Åtgärder"
+
+msgid "Associate Ephemeral External IP"
+msgstr ""
+
+msgid "Does this image support user data input (e.g. via cloud-init)?"
+msgstr "Stödjer denna bild användardata (såsom via cloud-init)?"
+
+msgid "Google Compute Engine plugin for the Foreman."
+msgstr ""
+
+msgid "Image"
+msgstr "Avbildning"
+
+msgid "Import Puppet classes"
+msgstr ""
+
+msgid "Import facts"
+msgstr ""
+
+msgid "JSON key"
+msgstr ""
+
+msgid "Load Zones"
+msgstr ""
+
+msgid "Machine Type"
+msgstr "Maskintyp"
+
+msgid "Machine type"
+msgstr "Maskintyp"
+
+msgid "Missing an image for operating system!"
+msgstr ""
+
+msgid "Name"
+msgstr "Namn"
+
+msgid "Network"
+msgstr "Nätverk"
+
+msgid "Please select an image"
+msgstr "Vänligen välj en avbildning"
+
+msgid "Preupgrade job"
+msgstr ""
+
+msgid "Properties"
+msgstr "Egenskaper"
+
+msgid "Remote action:"
+msgstr ""
+
+msgid "Size (GB)"
+msgstr "Storlek (GB)"
+
+msgid "State"
+msgstr "Tillstånd"
+
+msgid "The user that is used to ssh into the instance, normally cloud-user, ec2-user, ubuntu, etc. Note: Google engine doesn't support SSH for the root user."
+msgstr ""
+
+msgid "Type"
+msgstr "Typ"
+
+msgid "Zone"
+msgstr "Zon"
+
+msgid "console is not available at this time because the instance is powered off"
+msgstr ""

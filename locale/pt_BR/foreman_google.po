@@ -1,0 +1,103 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the foreman_google package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+# Translators:
+# Flamarion Jorge <jorge.flamarion@gmail.com>, 2022
+# 0868a4d1af5275b3f70b0a6dac4c99a4, 2022
+# Bryan Kearney <bryan.kearney@gmail.com>, 2022
+# Amit Upadhye <aupadhye@redhat.com>, 2022
+# Luiz Henrique Vasconcelos <luizvasconceloss@yahoo.com.br>, 2022
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: foreman_google 1.0.0\n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: 2022-08-01 12:51+0000\n"
+"Last-Translator: Luiz Henrique Vasconcelos <luizvasconceloss@yahoo.com.br>, 20"
+"22\n"
+"Language-Team: Portuguese (Brazil) (https://www.transifex.com/foreman/teams/11"
+"4/pt_BR/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: pt_BR\n"
+"Plural-Forms: nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 100000"
+"0 == 0 ? 1 : 2;\n"
+
+msgid "Action with sub plans"
+msgstr "Ação com subplanos "
+
+msgid "Actions"
+msgstr "Ações"
+
+msgid "Associate Ephemeral External IP"
+msgstr "Associar IP externo efêmero"
+
+msgid "Does this image support user data input (e.g. via cloud-init)?"
+msgstr "Esta imagem suporta a entrada de dados do usuário (ex.: via cloud-init)?"
+
+msgid "Google Compute Engine plugin for the Foreman."
+msgstr ""
+
+msgid "Image"
+msgstr "Imagem"
+
+msgid "Import Puppet classes"
+msgstr "Importar classes de Puppet"
+
+msgid "Import facts"
+msgstr "Importar fatos"
+
+msgid "JSON key"
+msgstr ""
+
+msgid "Load Zones"
+msgstr "Carregar zonas"
+
+msgid "Machine Type"
+msgstr "Tipo de máquina"
+
+msgid "Machine type"
+msgstr "Tipo de máquina"
+
+msgid "Missing an image for operating system!"
+msgstr ""
+
+msgid "Name"
+msgstr "Nome"
+
+msgid "Network"
+msgstr "Rede"
+
+msgid "Please select an image"
+msgstr "Por favor selecione uma imagem"
+
+msgid "Preupgrade job"
+msgstr "Trabalho de pré-aperfeiçoamento"
+
+msgid "Properties"
+msgstr "Propriedades"
+
+msgid "Remote action:"
+msgstr "Ação remota:"
+
+msgid "Size (GB)"
+msgstr "Tamanho (GB)"
+
+msgid "State"
+msgstr "Estado"
+
+msgid "The user that is used to ssh into the instance, normally cloud-user, ec2-user, ubuntu, etc. Note: Google engine doesn't support SSH for the root user."
+msgstr ""
+
+msgid "Type"
+msgstr "Tipo"
+
+msgid "Zone"
+msgstr "Zona"
+
+msgid "console is not available at this time because the instance is powered off"
+msgstr "console não está disponível neste momento porque a instância está desligada"

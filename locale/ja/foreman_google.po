@@ -1,0 +1,98 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the foreman_google package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+# Translators:
+# 0868a4d1af5275b3f70b0a6dac4c99a4, 2022
+# Amit Upadhye <aupadhye@redhat.com>, 2022
+# Bryan Kearney <bryan.kearney@gmail.com>, 2022
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: foreman_google 1.0.0\n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: 2022-08-01 12:51+0000\n"
+"Last-Translator: Bryan Kearney <bryan.kearney@gmail.com>, 2022\n"
+"Language-Team: Japanese (https://www.transifex.com/foreman/teams/114/ja/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ja\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid "Action with sub plans"
+msgstr "サブプランによるアクション"
+
+msgid "Actions"
+msgstr "アクション"
+
+msgid "Associate Ephemeral External IP"
+msgstr "一時外部 ID の関連付け"
+
+msgid "Does this image support user data input (e.g. via cloud-init)?"
+msgstr "このイメージはユーザーのデータ入力に対応しますか (例: cloud-init 経由)?"
+
+msgid "Google Compute Engine plugin for the Foreman."
+msgstr ""
+
+msgid "Image"
+msgstr "イメージ"
+
+msgid "Import Puppet classes"
+msgstr "Puppet クラスのインポート"
+
+msgid "Import facts"
+msgstr "ファクトのインポート"
+
+msgid "JSON key"
+msgstr ""
+
+msgid "Load Zones"
+msgstr "ゾーンのロード"
+
+msgid "Machine Type"
+msgstr "マシンタイプ"
+
+msgid "Machine type"
+msgstr "マシンタイプ"
+
+msgid "Missing an image for operating system!"
+msgstr ""
+
+msgid "Name"
+msgstr "名前"
+
+msgid "Network"
+msgstr "ネットワーク"
+
+msgid "Please select an image"
+msgstr "イメージを選択してください"
+
+msgid "Preupgrade job"
+msgstr "アップグレード前のジョブ"
+
+msgid "Properties"
+msgstr "プロパティー"
+
+msgid "Remote action:"
+msgstr "リモートアクション:"
+
+msgid "Size (GB)"
+msgstr "サイズ (GB)"
+
+msgid "State"
+msgstr "状態"
+
+msgid "The user that is used to ssh into the instance, normally cloud-user, ec2-user, ubuntu, etc. Note: Google engine doesn't support SSH for the root user."
+msgstr ""
+
+msgid "Type"
+msgstr "タイプ"
+
+msgid "Zone"
+msgstr "ゾーン"
+
+msgid "console is not available at this time because the instance is powered off"
+msgstr "インスタンスの電源がオフであるため、現時点ではコンソールは使用できません"

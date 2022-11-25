@@ -1,0 +1,99 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the foreman_google package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+# Translators:
+# Isaac Tseng <isaac.kuang@gmail.com>, 2022
+# Bryan Kearney <bryan.kearney@gmail.com>, 2022
+# 0868a4d1af5275b3f70b0a6dac4c99a4, 2022
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: foreman_google 1.0.0\n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: 2022-08-01 12:51+0000\n"
+"Last-Translator: 0868a4d1af5275b3f70b0a6dac4c99a4, 2022\n"
+"Language-Team: Chinese (Taiwan) (https://www.transifex.com/foreman/teams/114/z"
+"h_TW/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: zh_TW\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid "Action with sub plans"
+msgstr "有子計畫的動作"
+
+msgid "Actions"
+msgstr "動作"
+
+msgid "Associate Ephemeral External IP"
+msgstr ""
+
+msgid "Does this image support user data input (e.g. via cloud-init)?"
+msgstr "這映像檔是否支援使用者資料輸入（比方說透過 cloud-init）？"
+
+msgid "Google Compute Engine plugin for the Foreman."
+msgstr ""
+
+msgid "Image"
+msgstr "影像"
+
+msgid "Import Puppet classes"
+msgstr "匯入 Puppet 類別"
+
+msgid "Import facts"
+msgstr "匯入詳情"
+
+msgid "JSON key"
+msgstr ""
+
+msgid "Load Zones"
+msgstr ""
+
+msgid "Machine Type"
+msgstr "機器類型"
+
+msgid "Machine type"
+msgstr "機器類型"
+
+msgid "Missing an image for operating system!"
+msgstr ""
+
+msgid "Name"
+msgstr "名稱"
+
+msgid "Network"
+msgstr "網路"
+
+msgid "Please select an image"
+msgstr "請選擇一個映像檔"
+
+msgid "Preupgrade job"
+msgstr ""
+
+msgid "Properties"
+msgstr "屬性"
+
+msgid "Remote action:"
+msgstr "遠端動作："
+
+msgid "Size (GB)"
+msgstr "大小（GB）"
+
+msgid "State"
+msgstr "狀態"
+
+msgid "The user that is used to ssh into the instance, normally cloud-user, ec2-user, ubuntu, etc. Note: Google engine doesn't support SSH for the root user."
+msgstr ""
+
+msgid "Type"
+msgstr "類型"
+
+msgid "Zone"
+msgstr "區域"
+
+msgid "console is not available at this time because the instance is powered off"
+msgstr ""
