@@ -6,9 +6,9 @@
 # Translators:
 # Baptiste Agasse <baptiste.agasse@gmail.com>, 2022
 # 21966816214bc546c1fc8a185e75ca1c, 2022
-# Amit Upadhye <aupadhye@redhat.com>, 2022
 # Bryan Kearney <bryan.kearney@gmail.com>, 2022
 # Claer <transiblu@claer.hammock.fr>, 2022
+# Amit Upadhye <aupadhye@redhat.com>, 2022
 #
 #, fuzzy
 msgid ""
@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: foreman_google 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
 "PO-Revision-Date: 2022-08-01 12:51+0000\n"
-"Last-Translator: Claer <transiblu@claer.hammock.fr>, 2022\n"
+"Last-Translator: Amit Upadhye <aupadhye@redhat.com>, 2022\n"
 "Language-Team: French (https://www.transifex.com/foreman/teams/114/fr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -38,7 +38,7 @@ msgid "Does this image support user data input (e.g. via cloud-init)?"
 msgstr "Cette image prend-t-elle en charge l'entrée de paramètres utilisateur (p.e. via cloud-init) ?"
 
 msgid "Google Compute Engine plugin for the Foreman."
-msgstr ""
+msgstr "Plugin Google Compute Engine pour le Foreman."
 
 msgid "Image"
 msgstr "Image"
@@ -50,7 +50,7 @@ msgid "Import facts"
 msgstr "Importer des faits"
 
 msgid "JSON key"
-msgstr ""
+msgstr "Clé JSON"
 
 msgid "Load Zones"
 msgstr "Zones de chargement"
@@ -62,7 +62,7 @@ msgid "Machine type"
 msgstr "Type de machine"
 
 msgid "Missing an image for operating system!"
-msgstr ""
+msgstr "Il manque une image pour le système d'exploitation !"
 
 msgid "Name"
 msgstr "Nom"
@@ -86,10 +86,10 @@ msgid "Size (GB)"
 msgstr "Taille (Go)"
 
 msgid "State"
-msgstr "État "
+msgstr "État"
 
 msgid "The user that is used to ssh into the instance, normally cloud-user, ec2-user, ubuntu, etc. Note: Google engine doesn't support SSH for the root user."
-msgstr ""
+msgstr "L'utilisateur qui est utilisé pour se connecter à l'instance via ssh, normalement cloud-user, ec2-user, ubuntu, etc. Remarque : le moteur Google ne prend pas en charge SSH pour l'utilisateur root."
 
 msgid "Type"
 msgstr "Type"

@@ -9,9 +9,9 @@
 # fe37ea014ea122db60df81cd86b163af_742ef71 <ba9f59c06b0be83ac3724b1834a4c14b_93939>, 2022
 # Carmela Rubiños <carmela.rubinos@gmail.com>, 2022
 # nefeli <vidakovic@gmail.com>, 2022
-# Amit Upadhye <aupadhye@redhat.com>, 2022
 # Bryan Kearney <bryan.kearney@gmail.com>, 2022
 # Gustavo Varela <gustavo.varela@gmail.com>, 2022
+# Amit Upadhye <aupadhye@redhat.com>, 2022
 #
 #, fuzzy
 msgid ""
@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: foreman_google 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
 "PO-Revision-Date: 2022-08-01 12:51+0000\n"
-"Last-Translator: Gustavo Varela <gustavo.varela@gmail.com>, 2022\n"
+"Last-Translator: Amit Upadhye <aupadhye@redhat.com>, 2022\n"
 "Language-Team: Spanish (https://www.transifex.com/foreman/teams/114/es/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -68,7 +68,7 @@ msgid "Missing an image for operating system!"
 msgstr ""
 
 msgid "Name"
-msgstr "名前"
+msgstr "Nombre"
 
 msgid "Network"
 msgstr "Red"
@@ -77,7 +77,7 @@ msgid "Please select an image"
 msgstr "Seleccione una imagen"
 
 msgid "Preupgrade job"
-msgstr "Trabajo de pre-actualización"
+msgstr "Trabajo previo a la actualización"
 
 msgid "Properties"
 msgstr "Propiedades"
@@ -86,7 +86,7 @@ msgid "Remote action:"
 msgstr "Acción remota:"
 
 msgid "Size (GB)"
-msgstr ""
+msgstr "Tamaño (GB)"
 
 msgid "State"
 msgstr "Estado"
@@ -95,7 +95,7 @@ msgid "The user that is used to ssh into the instance, normally cloud-user, ec2-
 msgstr ""
 
 msgid "Type"
-msgstr "タイプ"
+msgstr "Tipo"
 
 msgid "Zone"
 msgstr "Zona"
