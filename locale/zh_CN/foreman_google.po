@@ -6,8 +6,8 @@
 # Translators:
 # 0868a4d1af5275b3f70b0a6dac4c99a4, 2022
 # Bryan Kearney <bryan.kearney@gmail.com>, 2022
-# Amit Upadhye <aupadhye@redhat.com>, 2022
 # tim123, 2022
+# Amit Upadhye <aupadhye@redhat.com>, 2022
 #
 #, fuzzy
 msgid ""
@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: foreman_google 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
 "PO-Revision-Date: 2022-08-01 12:51+0000\n"
-"Last-Translator: tim123, 2022\n"
+"Last-Translator: Amit Upadhye <aupadhye@redhat.com>, 2022\n"
 "Language-Team: Chinese (China) (https://www.transifex.com/foreman/teams/114/zh"
 "_CN/)\n"
 "MIME-Version: 1.0\n"
@@ -25,7 +25,7 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 msgid "Action with sub plans"
-msgstr "由子计划的操作"
+msgstr "有子计划的操作"
 
 msgid "Actions"
 msgstr "操作"
@@ -37,7 +37,7 @@ msgid "Does this image support user data input (e.g. via cloud-init)?"
 msgstr "这个镜像是否支持用户数据输入（例如：通过 cloud-init）？"
 
 msgid "Google Compute Engine plugin for the Foreman."
-msgstr ""
+msgstr "Foreman 的 Google Compute Engine 插件。"
 
 msgid "Image"
 msgstr "镜像"
@@ -46,10 +46,10 @@ msgid "Import Puppet classes"
 msgstr "导入 Puppet 类"
 
 msgid "Import facts"
-msgstr "导入 fact"
+msgstr "导入事实"
 
 msgid "JSON key"
-msgstr ""
+msgstr "JSON 键"
 
 msgid "Load Zones"
 msgstr "加载区域"
@@ -61,7 +61,7 @@ msgid "Machine type"
 msgstr "机器类型"
 
 msgid "Missing an image for operating system!"
-msgstr ""
+msgstr "缺少操作系统镜像！"
 
 msgid "Name"
 msgstr "名称"
@@ -88,10 +88,10 @@ msgid "State"
 msgstr "状态"
 
 msgid "The user that is used to ssh into the instance, normally cloud-user, ec2-user, ubuntu, etc. Note: Google engine doesn't support SSH for the root user."
-msgstr ""
+msgstr "用于 ssh 到实例的用户，通常为 cloud-user、ec2-user、ubuntu 等：Google 引擎不支持 root 用户的 SSH。"
 
 msgid "Type"
-msgstr "類型"
+msgstr "类型"
 
 msgid "Zone"
 msgstr "区"
