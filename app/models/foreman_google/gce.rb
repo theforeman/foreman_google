@@ -33,7 +33,7 @@ module ForemanGoogle
     end
 
     def available_networks(_cluster_id = nil)
-      client.networks.items
+      client.networks
     end
 
     def machine_types
