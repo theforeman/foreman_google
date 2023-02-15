@@ -10,10 +10,9 @@
 # Claer <transiblu@claer.hammock.fr>, 2022
 # Amit Upadhye <aupadhye@redhat.com>, 2022
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: foreman_google 1.0.0\n"
+"Project-Id-Version: foreman_google 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
 "PO-Revision-Date: 2022-08-01 12:51+0000\n"
 "Last-Translator: Amit Upadhye <aupadhye@redhat.com>, 2022\n"
@@ -33,6 +32,9 @@ msgstr "Actions"
 
 msgid "Associate Ephemeral External IP"
 msgstr "Associer l’IP externe éphémère"
+
+msgid "Certificate path, for GCE only"
+msgstr ""
 
 msgid "Does this image support user data input (e.g. via cloud-init)?"
 msgstr "Cette image prend-t-elle en charge l'entrée de paramètres utilisateur (p.e. via cloud-init) ?"
@@ -96,6 +98,9 @@ msgstr "Type"
 
 msgid "Zone"
 msgstr "Zone"
+
+msgid "Zone, for GCE only"
+msgstr ""
 
 msgid "console is not available at this time because the instance is powered off"
 msgstr "la console n'est pas disponible pour le moment car l'instance est éteinte"

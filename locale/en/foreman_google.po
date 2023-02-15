@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: foreman_google 1.0.0\n"
+"Project-Id-Version: foreman_google 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
 "PO-Revision-Date: 2014-08-20 08:54+0100\n"
 "Last-Translator: Foreman Team <foreman-dev@googlegroups.com>\n"
@@ -22,6 +22,9 @@ msgid "Actions"
 msgstr ""
 
 msgid "Associate Ephemeral External IP"
+msgstr ""
+
+msgid "Certificate path, for GCE only"
 msgstr ""
 
 msgid "Does this image support user data input (e.g. via cloud-init)?"
@@ -85,6 +88,9 @@ msgid "Type"
 msgstr ""
 
 msgid "Zone"
+msgstr ""
+
+msgid "Zone, for GCE only"
 msgstr ""
 
 msgid "console is not available at this time because the instance is powered off"

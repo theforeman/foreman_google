@@ -8,10 +8,9 @@
 # Bryan Kearney <bryan.kearney@gmail.com>, 2022
 # Amit Upadhye <aupadhye@redhat.com>, 2022
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: foreman_google 1.0.0\n"
+"Project-Id-Version: foreman_google 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
 "PO-Revision-Date: 2022-08-01 12:51+0000\n"
 "Last-Translator: Amit Upadhye <aupadhye@redhat.com>, 2022\n"
@@ -30,6 +29,9 @@ msgstr "アクション"
 
 msgid "Associate Ephemeral External IP"
 msgstr "一時外部 ID の関連付け"
+
+msgid "Certificate path, for GCE only"
+msgstr ""
 
 msgid "Does this image support user data input (e.g. via cloud-init)?"
 msgstr "このイメージはユーザーのデータ入力に対応しますか (例: cloud-init 経由)?"
@@ -93,6 +95,9 @@ msgstr "タイプ"
 
 msgid "Zone"
 msgstr "ゾーン"
+
+msgid "Zone, for GCE only"
+msgstr ""
 
 msgid "console is not available at this time because the instance is powered off"
 msgstr "インスタンスの電源がオフであるため、現時点ではコンソールは使用できません"
