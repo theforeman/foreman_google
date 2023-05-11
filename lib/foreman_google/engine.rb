@@ -12,8 +12,9 @@ module ForemanGoogle
 
     initializer 'foreman_google.register_plugin', before: :finisher_hook do |_app|
       Foreman::Plugin.register :foreman_google do
-        requires_foreman '>= 3.5.0'
+        requires_foreman '>= 3.7.0'
         register_global_js_file 'global'
+        register_gettext
 
         in_to_prepare do
           compute_resource(ForemanGoogle::GCE)
@@ -39,12 +40,6 @@ module ForemanGoogle
       Rake::Task['db:seed'].enhance do
         ForemanGoogle::Engine.load_seed
       end
-    end
-
-    initializer 'foreman_google.register_gettext', after: :load_config_initializers do |_app|
-      locale_dir = File.join(File.expand_path('../..', __dir__), 'locale')
-      locale_domain = 'foreman_google'
-      Foreman::Gettext::Support.add_text_domain locale_domain, locale_dir
     end
   end
 end
