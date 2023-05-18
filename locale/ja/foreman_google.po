@@ -8,7 +8,6 @@
 # Bryan Kearney <bryan.kearney@gmail.com>, 2022
 # Amit Upadhye <aupadhye@redhat.com>, 2022
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: foreman_google 1.0.0\n"
@@ -30,6 +29,15 @@ msgstr "アクション"
 
 msgid "Associate Ephemeral External IP"
 msgstr "一時外部 ID の関連付け"
+
+msgid "Certificate path, for GCE only"
+msgstr ""
+
+msgid "Deprecated, email is automatically loaded from the JSON file. For GCE only"
+msgstr ""
+
+msgid "Deprecated, project is automatically loaded from the JSON file. For GCE only"
+msgstr ""
 
 msgid "Does this image support user data input (e.g. via cloud-init)?"
 msgstr "このイメージはユーザーのデータ入力に対応しますか (例: cloud-init 経由)?"
@@ -85,6 +93,12 @@ msgstr "サイズ (GB)"
 msgid "State"
 msgstr "状態"
 
+msgid "The email parameter is deprecated, value is automatically loaded from the JSON file"
+msgstr ""
+
+msgid "The project parameter is deprecated, value is automatically loaded from the JSON file"
+msgstr ""
+
 msgid "The user that is used to ssh into the instance, normally cloud-user, ec2-user, ubuntu, etc. Note: Google engine doesn't support SSH for the root user."
 msgstr "インスタンスへの ssh 接続に使用するユーザーは通常、cloud-user、ec2-user、ubuntu などです。注: Google エンジンは、root ユーザーの ssh をサポートしません。"
 
@@ -93,6 +107,9 @@ msgstr "タイプ"
 
 msgid "Zone"
 msgstr "ゾーン"
+
+msgid "Zone, for GCE only"
+msgstr ""
 
 msgid "console is not available at this time because the instance is powered off"
 msgstr "インスタンスの電源がオフであるため、現時点ではコンソールは使用できません"

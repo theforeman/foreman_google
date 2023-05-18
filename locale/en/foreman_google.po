@@ -24,6 +24,15 @@ msgstr ""
 msgid "Associate Ephemeral External IP"
 msgstr ""
 
+msgid "Certificate path, for GCE only"
+msgstr ""
+
+msgid "Deprecated, email is automatically loaded from the JSON file. For GCE only"
+msgstr ""
+
+msgid "Deprecated, project is automatically loaded from the JSON file. For GCE only"
+msgstr ""
+
 msgid "Does this image support user data input (e.g. via cloud-init)?"
 msgstr ""
 
@@ -78,6 +87,12 @@ msgstr ""
 msgid "State"
 msgstr ""
 
+msgid "The email parameter is deprecated, value is automatically loaded from the JSON file"
+msgstr ""
+
+msgid "The project parameter is deprecated, value is automatically loaded from the JSON file"
+msgstr ""
+
 msgid "The user that is used to ssh into the instance, normally cloud-user, ec2-user, ubuntu, etc. Note: Google engine doesn't support SSH for the root user."
 msgstr ""
 
@@ -85,6 +100,9 @@ msgid "Type"
 msgstr ""
 
 msgid "Zone"
+msgstr ""
+
+msgid "Zone, for GCE only"
 msgstr ""
 
 msgid "console is not available at this time because the instance is powered off"

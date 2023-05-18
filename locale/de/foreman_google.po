@@ -16,7 +16,6 @@
 # Ettore Atalan <atalanttore@googlemail.com>, 2022
 # Lukas Kallies <github.com@luke-web.de>, 2022
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: foreman_google 1.0.0\n"
@@ -38,6 +37,15 @@ msgstr "Aktionen"
 
 msgid "Associate Ephemeral External IP"
 msgstr "Temporäre externe IP anfügen"
+
+msgid "Certificate path, for GCE only"
+msgstr ""
+
+msgid "Deprecated, email is automatically loaded from the JSON file. For GCE only"
+msgstr ""
+
+msgid "Deprecated, project is automatically loaded from the JSON file. For GCE only"
+msgstr ""
 
 msgid "Does this image support user data input (e.g. via cloud-init)?"
 msgstr "Unterstützt dieses Abbild die Eingabe von Benutzerdaten (z. B. mittels cloud-init)?"
@@ -93,6 +101,12 @@ msgstr "Grösse (GB)"
 msgid "State"
 msgstr "Status"
 
+msgid "The email parameter is deprecated, value is automatically loaded from the JSON file"
+msgstr ""
+
+msgid "The project parameter is deprecated, value is automatically loaded from the JSON file"
+msgstr ""
+
 msgid "The user that is used to ssh into the instance, normally cloud-user, ec2-user, ubuntu, etc. Note: Google engine doesn't support SSH for the root user."
 msgstr "Der Benutzer, der verwendet wird um per SSH auf die Instanz zu verbinden. Üblicherweise ist dies cloud-user, ec2-user, ubuntu etc. Hinweis: Google Engine unterstützt den SSH-Zugriff als root-Benutzer nicht."
 
@@ -101,6 +115,9 @@ msgstr "Typ"
 
 msgid "Zone"
 msgstr "Zone"
+
+msgid "Zone, for GCE only"
+msgstr ""
 
 msgid "console is not available at this time because the instance is powered off"
 msgstr "Konsole ist derzeit nicht verfügbar, da die Instanz ausgeschaltet ist"
