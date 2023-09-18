@@ -1,8 +1,10 @@
 [main]
 host = https://www.transifex.com
 
-[foreman.foreman_google]
+[o:foreman:p:foreman:r:foreman_google]
 file_filter = locale/<lang>/foreman_google.edit.po
 source_file = locale/foreman_google.pot
 source_lang = en
 type = PO
+minimum_perc  = 50
+resource_name = foreman_google

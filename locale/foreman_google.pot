@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: foreman_google 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-29 13:33+0200\n"
-"PO-Revision-Date: 2022-07-29 13:33+0200\n"
+"POT-Creation-Date: 2023-05-18 11:01+0000\n"
+"PO-Revision-Date: 2023-05-18 11:01+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -18,11 +18,39 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: ../app/models/foreman_google/gce.rb:126
+#: ../app/controllers/foreman_google/api/v2/apipie_extensions.rb:9
+msgid "Certificate path, for GCE only"
+msgstr ""
+
+#: ../app/controllers/foreman_google/api/v2/apipie_extensions.rb:10
+msgid "Zone, for GCE only"
+msgstr ""
+
+#: ../app/controllers/foreman_google/api/v2/apipie_extensions.rb:11
+msgid "Deprecated, project is automatically loaded from the JSON file. For GCE only"
+msgstr ""
+
+#: ../app/controllers/foreman_google/api/v2/apipie_extensions.rb:12
+msgid "Deprecated, email is automatically loaded from the JSON file. For GCE only"
+msgstr ""
+
+#: ../app/controllers/foreman_google/api/v2/compute_resources_extensions.rb:25
+msgid ""
+"The email parameter is deprecated, value is automatically loaded from the JSON"
+" file"
+msgstr ""
+
+#: ../app/controllers/foreman_google/api/v2/compute_resources_extensions.rb:30
+msgid ""
+"The project parameter is deprecated, value is automatically loaded from the JS"
+"ON file"
+msgstr ""
+
+#: ../app/models/foreman_google/gce.rb:130
 msgid "console is not available at this time because the instance is powered off"
 msgstr ""
 
-#: ../app/models/foreman_google/gce.rb:170
+#: ../app/models/foreman_google/gce.rb:174
 msgid "Missing an image for operating system!"
 msgstr ""
 
