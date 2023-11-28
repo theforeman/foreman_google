@@ -1,5 +1,5 @@
 [main]
-host = https://www.transifex.com
+host = https://app.transifex.com
 
 [o:foreman:p:foreman:r:foreman_google]
 file_filter = locale/<lang>/foreman_google.edit.po
