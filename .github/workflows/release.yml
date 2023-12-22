@@ -1,0 +1,31 @@
+name: Release plugin
+
+on:
+  push:
+    paths:
+      - "lib/foreman_google/version.rb"
+
+jobs:
+  gem:
+    name: Gem
+    uses: theforeman/actions/.github/workflows/release-gem.yml@v0
+    with:
+      allowed_owner: theforeman
+    secrets:
+      api_key: ${{ secrets.RUBYGEM_API_KEY }}
+  tag:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 2.7
+      - name: Set variables
+        run: |
+          VER=$(ruby -rrubygems -e 'puts Gem::Specification::load(Dir.glob("*.gemspec")[0]).version')
+          echo "VERSION=$VER" >> $GITHUB_ENV
+      - name: Tag snapshot
+        uses: tvdias/github-tagger@v0.0.1
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          tag: "v${{ env.VERSION }}"
