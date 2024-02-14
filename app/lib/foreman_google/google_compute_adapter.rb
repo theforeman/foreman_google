@@ -18,10 +18,10 @@ module ForemanGoogle
       operation_attrs = { zone: zone, operation: response.operation.id.to_s }
 
       wait_for do
-        get('zone_operations', operation_attrs).status == :DONE
+        get('zone_operations', **operation_attrs).status == :DONE
       end
 
-      e = get('zone_operations', operation_attrs).error
+      e = get('zone_operations', **operation_attrs).error
 
       return response unless e
 
