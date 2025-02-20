@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: foreman_google 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-28 22:33+0100\n"
-"PO-Revision-Date: 2023-11-28 22:33+0100\n"
+"POT-Creation-Date: 2025-02-20 10:11+0100\n"
+"PO-Revision-Date: 2025-02-20 10:11+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -46,11 +46,11 @@ msgid ""
 "ON file"
 msgstr ""
 
-#: ../app/models/foreman_google/gce.rb:130
+#: ../app/models/foreman_google/gce.rb:128
 msgid "console is not available at this time because the instance is powered off"
 msgstr ""
 
-#: ../app/models/foreman_google/gce.rb:174
+#: ../app/models/foreman_google/gce.rb:172
 msgid "Missing an image for operating system!"
 msgstr ""
 
@@ -124,26 +124,6 @@ msgstr ""
 
 #: ../app/views/images/form/_gce.html.erb:3
 msgid "Does this image support user data input (e.g. via cloud-init)?"
-msgstr ""
-
-#: action_names.rb:2
-msgid "Preupgrade job"
-msgstr ""
-
-#: action_names.rb:3
-msgid "Action with sub plans"
-msgstr ""
-
-#: action_names.rb:4
-msgid "Import facts"
-msgstr ""
-
-#: action_names.rb:5
-msgid "Import Puppet classes"
-msgstr ""
-
-#: action_names.rb:6
-msgid "Remote action:"
 msgstr ""
 
 #: gemspec.rb:2
