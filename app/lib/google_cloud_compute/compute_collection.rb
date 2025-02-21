@@ -2,8 +2,8 @@ module GoogleCloudCompute
   class ComputeCollection
     include Enumerable
 
-    def initialize(client, zone, attrs)
-      instances = client.instances(zone, attrs)
+    def initialize(client, zone, attrs = {})
+      instances = client.instances(zone, **attrs)
       @virtual_machines = instances.map do |vm|
         ForemanGoogle::GoogleCompute.new client: client,
           zone: zone,
