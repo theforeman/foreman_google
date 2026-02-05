@@ -10,6 +10,12 @@ module ForemanGoogle
       end
     end
 
+    initializer 'foreman_google.add_rabl_view_path' do
+      Rabl.configure do |config|
+        config.view_paths << ForemanGoogle::Engine.root.join('app', 'views')
+      end
+    end
+
     initializer 'foreman_google.register_plugin', before: :finisher_hook do |_app|
       Foreman::Plugin.register :foreman_google do
         requires_foreman '>= 3.13.0'
