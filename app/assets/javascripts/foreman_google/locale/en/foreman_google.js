@@ -5,7 +5,7 @@
       "": {
         "Project-Id-Version": "foreman_google 1.0.0",
         "Report-Msgid-Bugs-To": "",
-        "PO-Revision-Date": "2025-10-07 14:19+0200",
+        "PO-Revision-Date": "2026-02-11 15:19+0100",
         "Last-Translator": "FULL NAME <EMAIL@ADDRESS>",
         "Language-Team": "LANGUAGE <LL@li.org>",
         "Language": "",

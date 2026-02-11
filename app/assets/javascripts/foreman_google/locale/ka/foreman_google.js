@@ -3,7 +3,7 @@
   "locale_data": {
     "foreman_google": {
       "": {
-        "Project-Id-Version": "foreman_google 3.0.5",
+        "Project-Id-Version": "foreman_google 3.0.6",
         "Report-Msgid-Bugs-To": "",
         "PO-Revision-Date": "2022-08-01 12:51+0000",
         "Last-Translator": "Temuri Doghonadze <temuri.doghonadze@gmail.com>, 2023",

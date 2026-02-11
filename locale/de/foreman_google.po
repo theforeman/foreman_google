@@ -7,7 +7,7 @@
 # mbacovsky <martin.bacovsky@gmail.com>, 2022
 # Arnold Bechtoldt <mail@arnoldbechtoldt.com>, 2022
 # abf90805572190d649c59f7a021d76cb, 2022
-# Crited <Alexander.Stoll@netways.de>, 2022
+# Alexander Stoll <Alexander.Stoll@netways.de>, 2022
 # simon11 <transifex@stieger.co>, 2022
 # Martin Zimmermann <martin.zimmermann@gmx.com>, 2022
 # pdolinic, 2022
@@ -17,7 +17,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: foreman_google 3.0.5\n"
+"Project-Id-Version: foreman_google 3.0.6\n"
 "Report-Msgid-Bugs-To: \n"
 "PO-Revision-Date: 2022-08-01 12:51+0000\n"
 "Last-Translator: Lukas Kallies <github.com@luke-web.de>, 2022\n"
