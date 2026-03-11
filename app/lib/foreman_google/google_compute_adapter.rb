@@ -148,8 +148,7 @@ module ForemanGoogle
 
     def list_images(project, **opts)
       resource_name = 'images'
-      response = resource_client(resource_name).list(project: project, **opts).response
-      response.items
+      resource_client(resource_name).list(project: project, **opts).to_a
     rescue ::Google::Cloud::Error => e
       raise Foreman::WrappedException.new(e, 'Cannot list Google resource %s', resource_name)
     end
