@@ -22,7 +22,4 @@ Gem::Specification.new do |s|
   s.add_dependency 'google-apis-compute_v1', '0.54.0'
   s.add_dependency 'google-cloud-compute', '0.5.0'
   s.add_dependency 'google-protobuf', '3.24.3'
-
-  s.add_development_dependency 'rdoc'
-  s.add_development_dependency 'theforeman-rubocop', '~> 0.1.1'
 end
