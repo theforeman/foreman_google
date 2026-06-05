@@ -194,20 +194,209 @@ module ForemanGoogle
 
     it '@network' do
       cr = ForemanGoogle::GoogleCompute.new(client: client, zone: zone)
-      assert cr.network, 'default'
+      assert_equal 'default', cr.network
 
       cr = ForemanGoogle::GoogleCompute.new(client: client, zone: zone, args: { network: 'my-network' })
-      assert cr.network, 'my-network'
+      assert_equal 'my-network', cr.network
     end
 
     it '@zone' do
       cr = ForemanGoogle::GoogleCompute.new(client: client, zone: zone)
-      assert zone, cr.zone
+      assert_equal zone, cr.zone
     end
 
     it '@zone_name' do
       cr = ForemanGoogle::GoogleCompute.new(client: client, zone: zone, instance: instance)
-      assert zone, cr.zone_name
+      assert_equal zone, cr.zone_name
+    end
+
+    describe '#status' do
+      it 'returns status when persisted' do
+        instance.status = 'RUNNING'
+        client.expects(:instance).with(zone, identity).returns(instance)
+        assert_equal 'RUNNING', subject.status
+      end
+
+      it 'returns false when not persisted' do
+        cr = ForemanGoogle::GoogleCompute.new(client: client, zone: zone)
+        assert_not cr.status
+      end
+    end
+
+    describe '#state' do
+      it 'is an alias for status' do
+        instance.status = 'TERMINATED'
+        client.expects(:instance).with(zone, identity).returns(instance)
+        assert_equal subject.status, subject.state
+      end
+    end
+
+    describe '#start' do
+      it 'delegates to client.start when persisted' do
+        client.stubs(:instance).with(zone, identity).returns(instance)
+        client.expects(:start).with(zone, identity).returns(true)
+        subject.start
+      end
+
+      it 'raises when not persisted' do
+        cr = ForemanGoogle::GoogleCompute.new(client: client, zone: zone)
+        assert_raises(Foreman::Exception) { cr.start }
+      end
+    end
+
+    describe '#stop' do
+      it 'delegates to client.stop when persisted' do
+        client.stubs(:instance).with(zone, identity).returns(instance)
+        client.expects(:stop).with(zone, identity).returns(true)
+        subject.stop
+      end
+
+      it 'raises when not persisted' do
+        cr = ForemanGoogle::GoogleCompute.new(client: client, zone: zone)
+        assert_raises(Foreman::Exception) { cr.stop }
+      end
+    end
+
+    describe '#to_s' do
+      it 'returns the name' do
+        cr = ForemanGoogle::GoogleCompute.new(client: client, zone: zone, args: { name: 'my-vm' })
+        assert_equal 'my-vm', cr.to_s
+      end
+    end
+
+    describe '#interfaces' do
+      it 'returns network_interfaces' do
+        cr = ForemanGoogle::GoogleCompute.new(client: client, zone: zone)
+        assert_equal cr.network_interfaces, cr.interfaces
+      end
+    end
+
+    describe '#vm_description' do
+      it 'delegates to pretty_machine_type' do
+        cr = ForemanGoogle::GoogleCompute.new(client: client, zone: zone, instance: instance)
+        assert_equal cr.pretty_machine_type, cr.vm_description
+      end
+    end
+
+    describe '#vm_ip_address - no network interfaces' do
+      it 'returns nil' do
+        empty_instance = OpenStruct.new(
+          name: 'instance', network_interfaces: [],
+          creation_timestamp: Time.zone.now, zone: zone,
+          machine_type: 'machineTypes/e2-micro'
+        )
+        cr = ForemanGoogle::GoogleCompute.new(client: client, zone: zone, instance: empty_instance)
+        assert_nil cr.vm_ip_address
+      end
+    end
+
+    describe '#private_ip_address - no network interfaces' do
+      it 'returns nil' do
+        empty_instance = OpenStruct.new(
+          name: 'instance', network_interfaces: [],
+          creation_timestamp: Time.zone.now, zone: zone,
+          machine_type: 'machineTypes/e2-micro'
+        )
+        cr = ForemanGoogle::GoogleCompute.new(client: client, zone: zone, instance: empty_instance)
+        assert_nil cr.private_ip_address
+      end
+    end
+
+    describe '#pretty_image_name - no disks' do
+      it 'returns nil' do
+        instance.disks = []
+        cr = ForemanGoogle::GoogleCompute.new(client: client, zone: zone, instance: instance)
+        assert_nil cr.pretty_image_name
+      end
+    end
+
+    describe '#ip_addresses' do
+      it 'returns public and private IP' do
+        cr = ForemanGoogle::GoogleCompute.new(client: client, zone: zone, instance: instance)
+        assert_equal ['1.2.3.4', '10.10.10.23'], cr.ip_addresses
+      end
+    end
+
+    describe '#serial_port_output' do
+      it 'delegates to client' do
+        client.stubs(:instance).with(zone, identity).returns(instance)
+        client.expects(:serial_port_output).with(zone, identity).returns(OpenStruct.new(contents: 'boot log'))
+        assert_equal 'boot log', subject.serial_port_output
+      end
+
+      it 'returns nil when client returns nil' do
+        client.stubs(:instance).with(zone, identity).returns(instance)
+        client.expects(:serial_port_output).with(zone, identity).returns(nil)
+        assert_nil subject.serial_port_output
+      end
+    end
+
+    describe '#volumes_attributes=' do
+      it 'is a no-op' do
+        cr = ForemanGoogle::GoogleCompute.new(client: client, zone: zone)
+        cr.volumes_attributes = { '0' => { size_gb: 10 } }
+        assert cr.volumes.any?
+      end
+    end
+
+    describe '#reload - without identity' do
+      it 'returns nil' do
+        cr = ForemanGoogle::GoogleCompute.new(client: client, zone: zone)
+        assert_nil cr.reload
+      end
+    end
+
+    describe '#create_volumes' do
+      it 'inserts disks and waits for READY' do
+        cr = ForemanGoogle::GoogleCompute.new(client: client, zone: zone, args: { volumes: [{ size_gb: '20' }] })
+
+        client.expects(:insert_disk).with(zone, cr.volumes.first.insert_attrs)
+        client.expects(:disk).with(zone, cr.volumes.first.device_name).returns(OpenStruct.new(status: 'READY'))
+        client.expects(:wait_for).yields.returns({ duration: 1 })
+
+        cr.create_volumes
+      end
+    end
+
+    describe '#destroy_volumes' do
+      it 'deletes each volume disk' do
+        cr = ForemanGoogle::GoogleCompute.new(client: client, zone: zone, args: { volumes: [{ size_gb: '20' }] })
+        client.expects(:delete_disk).with(zone, cr.volumes.first.device_name)
+        cr.destroy_volumes
+      end
+    end
+
+    describe '#create_instance' do
+      it 'calls insert_instance via ComputeAttributes' do
+        cr = ForemanGoogle::GoogleCompute.new(client: client, zone: zone, args: { name: 'test-vm', machine_type: 'e2-micro' })
+        client.expects(:insert_instance).with(zone, has_key(:name))
+        cr.create_instance
+      end
+    end
+
+    describe '#set_disk_auto_delete' do
+      it 'delegates to client' do
+        args = { name: 'my-vm' }
+        cr = ForemanGoogle::GoogleCompute.new(client: client, zone: zone, args: args)
+        client.expects(:set_disk_auto_delete).with(zone, 'my-vm')
+        cr.set_disk_auto_delete
+      end
+    end
+
+    describe '#wait_for' do
+      it 'delegates to client.wait_for' do
+        cr = ForemanGoogle::GoogleCompute.new(client: client, zone: zone)
+        client.expects(:wait_for).yields.returns({ duration: 0 })
+        result = cr.wait_for { true }
+        assert_equal({ duration: 0 }, result)
+      end
+    end
+
+    describe '#public_ip_address' do
+      it 'is an alias for vm_ip_address' do
+        cr = ForemanGoogle::GoogleCompute.new(client: client, zone: zone, instance: instance)
+        assert_equal cr.vm_ip_address, cr.public_ip_address
+      end
     end
   end
 end

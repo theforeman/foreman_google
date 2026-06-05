@@ -131,7 +131,7 @@ module ForemanGoogle
 
         result = subject.insert_instance('us-east1-b', args)
 
-        assert 'insert', result.operation.operation_type
+        assert_equal 'insert', result.operation.operation_type
         assert_includes result.operation.target_link, 'foreman-test-google'
       end
 
@@ -156,14 +156,14 @@ module ForemanGoogle
         stub_request(:post, 'https://compute.googleapis.com/compute/v1/projects/coastal-haven-123456/zones/us-east1-b/instances/instance_name/start')
           .to_return(status: 200, body: File.read(File.join(__dir__, '..', '..', 'fixtures', 'instance_start.json')))
         result = subject.start('us-east1-b', 'instance_name')
-        assert 'start', result.operation.operation_type
+        assert_equal 'start', result.operation.operation_type
       end
 
       it '#stop' do
         stub_request(:post, 'https://compute.googleapis.com/compute/v1/projects/coastal-haven-123456/zones/us-east1-b/instances/instance_name/stop')
           .to_return(status: 200, body: File.read(File.join(__dir__, '..', '..', 'fixtures', 'instance_stop.json')))
         result = subject.stop('us-east1-b', 'instance_name')
-        assert 'stop', result.operation.operation_type
+        assert_equal 'stop', result.operation.operation_type
       end
 
       it '#set_disk_auto_delete' do
@@ -174,7 +174,7 @@ module ForemanGoogle
           .to_return(status: 200, body: File.read(File.join(__dir__, '..', '..', 'fixtures', 'instance_set_disk_auto_delete.json')))
         result = subject.set_disk_auto_delete('us-east1-b', 'instance_name')
 
-        assert 'device-1', result[0].source
+        assert_equal 'instance-1', result[0].device_name
         assert result[0].auto_delete
       end
     end
@@ -186,14 +186,14 @@ module ForemanGoogle
 
         result = subject.insert_disk('us-east1-b', { name: 'foreman-disk1', size_gb: 23 })
         assert_includes result.operation.target_link, 'foreman-disk1'
-        assert 'insert', result.operation.operation_type
+        assert_equal 'insert', result.operation.operation_type
       end
 
       it '#get' do
         stub_request(:get, 'https://compute.googleapis.com/compute/v1/projects/coastal-haven-123456/zones/us-east1-b/disks/foreman-disk1')
           .to_return(status: 200, body: File.read(File.join(__dir__, '..', '..', 'fixtures', 'disks_get.json')))
         result = subject.disk('us-east1-b', 'foreman-disk1')
-        assert 'foreman-disk1', result.name
+        assert_equal 'foreman-disk1', result.name
       end
 
       it '#delete' do
@@ -202,7 +202,59 @@ module ForemanGoogle
         result = subject.delete_disk('us-east1-b', 'foreman-disk1')
 
         assert_includes result.operation.target_link, 'foreman-disk1'
-        assert 'delete', result.operation.operation_type
+        assert_equal 'delete', result.operation.operation_type
+      end
+    end
+
+    describe '#delete_instance' do
+      it 'deletes an instance' do
+        stub_request(:delete, 'https://compute.googleapis.com/compute/v1/projects/coastal-haven-123456/zones/us-east1-b/instances/instance_name')
+          .to_return(status: 200, body: File.read(File.join(__dir__, '..', '..', 'fixtures', 'instance_stop.json')))
+        result = subject.delete_instance('us-east1-b', 'instance_name')
+        assert_equal 'stop', result.operation.operation_type
+      end
+    end
+
+    describe '#image' do
+      setup do
+        stub_request(:get, 'https://compute.googleapis.com/compute/v1/projects/coastal-haven-123456/global/images')
+          .to_return(body: File.read(File.join(__dir__, '..', '..', 'fixtures', 'images_coastal.json')))
+      end
+
+      it 'finds image by numeric id' do
+        subject.stub(:all_projects, []) do
+          result = subject.image(1)
+          assert_equal 'coastal-image', result.name
+        end
+      end
+
+      it 'returns nil when image not found' do
+        subject.stub(:all_projects, []) do
+          assert_nil subject.image(999)
+        end
+      end
+    end
+
+    describe '#serial_port_output' do
+      it 'returns serial port output' do
+        body = { contents: 'boot log output', next: 12_345, start: 0, selfLink: 'self-link' }.to_json
+        stub_request(:get, 'https://compute.googleapis.com/compute/v1/projects/coastal-haven-123456/zones/us-east1-b/instances/instance_name/serialPort')
+          .to_return(status: 200, body: body)
+        result = subject.serial_port_output('us-east1-b', 'instance_name')
+        assert_equal 'boot log output', result.contents
+      end
+    end
+
+    describe '#project_id' do
+      it 'returns the project_id from auth JSON' do
+        assert_equal 'coastal-haven-123456', subject.project_id
+      end
+    end
+
+    describe '#wait_for' do
+      it 'returns immediately when block yields true' do
+        result = subject.wait_for { true }
+        assert result[:duration] <= 1
       end
     end
   end

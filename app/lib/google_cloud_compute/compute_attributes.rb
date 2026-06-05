@@ -29,12 +29,14 @@ module GoogleCloudCompute
     end
 
     def for_instance(instance)
+      first_nic = instance.network_interfaces[0]
+
       {
         name: instance.name, hostname: instance.name,
         creation_timestamp: instance.creation_timestamp.to_datetime,
         zone_name: instance.zone.split('/').last,
         machine_type: instance.machine_type,
-        network: instance.network_interfaces[0].network.split('/').last,
+        network: first_nic&.network&.split('/')&.last,
         network_interfaces: instance.network_interfaces,
         volumes: instance.disks, metadata: instance.metadata
       }
