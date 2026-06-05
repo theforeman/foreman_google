@@ -17,7 +17,7 @@ upstream_tag_template: v{version}
 
 actions:
   post-upstream-clone:
-    - "wget https://raw.githubusercontent.com/theforeman/foreman-packaging/rpm/develop/packages/plugins/rubygem-foreman_google/rubygem-foreman_google.spec -O rubygem-foreman_google.spec"
+    - "wget https://raw.githubusercontent.com/stejskalleos/foreman-packaging/refs/heads/ls/google-ruby33/packages/plugins/rubygem-foreman_google/rubygem-foreman_google.spec -O rubygem-foreman_google.spec"
   get-current-version:
     - ruby -rrubygems -e 'puts Gem::Specification::load(Dir.glob("*.gemspec").first).version'
   create-archive:

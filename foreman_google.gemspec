@@ -11,15 +11,11 @@ Gem::Specification.new do |s|
   s.homepage    = 'https://github.com/theforeman/foreman_google'
   s.summary     = 'Google Compute Engine plugin for the Foreman'
   s.description = 'Google Compute Engine plugin for the Foreman'
-  s.required_ruby_version = '>= 2.7', '< 4'
+  s.required_ruby_version = '>= 3.0', '< 4'
 
   s.files = Dir['{app,config,db,lib,locale,webpack}/**/*'] + ['LICENSE', 'Rakefile', 'README.md', 'package.json']
   s.test_files = Dir['test/**/*'] + Dir['webpack/**/__tests__/*.js']
 
-  # Pin Google versions to avoid breaking changes
-  # Never versions with google-protobuf > 3.25.4
-  # are failing with `undefined method 'build'` error
-  s.add_dependency 'google-apis-compute_v1', '0.54.0'
-  s.add_dependency 'google-cloud-compute', '0.5.0'
-  s.add_dependency 'google-protobuf', '3.24.3'
+  s.add_dependency 'google-apis-compute_v1', '0.98.0'
+  s.add_dependency 'google-cloud-compute', '1.15.0'
 end
