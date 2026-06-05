@@ -35,12 +35,12 @@ module ForemanGoogle
     alias_method :state, :status
 
     def start
-      raise Foreman::Exception('unable to start machine that is not persisted') unless persisted?
+      raise Foreman::Exception, N_('unable to start machine that is not persisted') unless persisted?
       @client.start(@zone, identity)
     end
 
     def stop
-      raise Foreman::Exception('unable to stop machine that is not persisted') unless persisted?
+      raise Foreman::Exception, 'unable to stop machine that is not persisted' unless persisted?
       @client.stop(@zone, identity)
     end
 
