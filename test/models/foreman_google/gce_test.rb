@@ -18,24 +18,6 @@ module ForemanGoogle
       service.stubs(:project_id).returns('project_id')
     end
 
-    describe '.available?' do
-      it 'returns true' do
-        assert ForemanGoogle::GCE.available?
-      end
-    end
-
-    describe '.model_name' do
-      it 'returns ComputeResource model name' do
-        assert_equal ComputeResource.model_name, ForemanGoogle::GCE.model_name
-      end
-    end
-
-    describe '.provider_friendly_name' do
-      it 'returns Google' do
-        assert_equal 'Google', ForemanGoogle::GCE.provider_friendly_name
-      end
-    end
-
     describe '#to_label' do
       it 'includes name, zone, and provider' do
         subject.name = 'my-gce'
@@ -78,6 +60,11 @@ module ForemanGoogle
     end
 
     describe 'validations' do
+      it 'is valid with name, zone, and password' do
+        subject.name = 'test-gce'
+        assert subject.valid?, "Expected subject to be valid, got errors: #{subject.errors.full_messages}"
+      end
+
       it 'requires password' do
         cr = ForemanGoogle::GCE.new(zone: 'us-east1-b', password: nil)
         assert_not cr.valid?

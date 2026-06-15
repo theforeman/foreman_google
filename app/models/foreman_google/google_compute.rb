@@ -40,7 +40,7 @@ module ForemanGoogle
     end
 
     def stop
-      raise Foreman::Exception, 'unable to stop machine that is not persisted' unless persisted?
+      raise Foreman::Exception, N_('unable to stop machine that is not persisted') unless persisted?
       @client.stop(@zone, identity)
     end
 
