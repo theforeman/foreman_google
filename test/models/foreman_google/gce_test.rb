@@ -76,6 +76,12 @@ module ForemanGoogle
         assert_not cr.valid?
         assert_includes cr.errors.attribute_names, :zone
       end
+
+      it 'requires name' do
+        cr = ForemanGoogle::GCE.new(name: nil, zone: 'us-east1-b', password: gauth_json)
+        assert_not cr.valid?
+        assert_includes cr.errors.attribute_names, :name
+      end
     end
 
     describe '#zones' do
@@ -187,9 +193,10 @@ module ForemanGoogle
     end
 
     describe '#new_vm' do
-      it 'returns a GoogleCompute instance' do
-        vm = subject.new_vm(name: 'test-vm')
-        assert_kind_of ForemanGoogle::GoogleCompute, vm
+      it 'assigns provided attributes' do
+        vm = subject.new_vm(name: 'test-vm', machine_type: 'e2-micro')
+        assert_equal 'test-vm', vm.name
+        assert_equal 'e2-micro', vm.machine_type
       end
 
       it 'converts volumes_attributes nested hash' do
@@ -198,8 +205,8 @@ module ForemanGoogle
           'volumes_attributes' => { '0' => { 'size_gb' => '20' } },
         }
         vm = subject.new_vm(attrs)
-        assert_kind_of ForemanGoogle::GoogleCompute, vm
-        assert vm.volumes.any?
+        assert_equal 1, vm.volumes.size
+        assert_equal 20, vm.volumes.first.size_gb
       end
     end
 
