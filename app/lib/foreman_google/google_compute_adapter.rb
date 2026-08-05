@@ -45,6 +45,10 @@ module ForemanGoogle
       list('networks')
     end
 
+    def subnetworks(region)
+      list('subnetworks', region: region)
+    end
+
     def machine_types(zone)
       list('machine_types', zone: zone)
     end

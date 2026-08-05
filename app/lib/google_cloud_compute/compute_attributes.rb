@@ -6,16 +6,13 @@ module GoogleCloudCompute
 
     def for_new(args)
       name = parameterize_name(args[:name])
-      network = args[:network] || 'default'
-      associate_external_ip = ActiveModel::Type::Boolean.new.cast(args[:associate_external_ip])
-
-      { name: name, hostname: name,
-        machine_type: args[:machine_type],
-        network: network, associate_external_ip: associate_external_ip,
-        network_interfaces: construct_network(network, associate_external_ip, args[:network_interfaces] || []),
-        image_id: args[:image_id],
+      base = new_base_attrs(name, args)
+      base.merge(
+        network_interfaces: construct_network(base[:network], base[:subnetwork], args[:zone],
+          base[:associate_external_ip], args[:network_interfaces] || []),
         volumes: construct_volumes(name, args[:image_id], args[:volumes]),
-        metadata: construct_metadata(args) }
+        metadata: construct_metadata(args)
+      )
     end
 
     def for_create(instance)
@@ -30,16 +27,11 @@ module GoogleCloudCompute
 
     def for_instance(instance)
       first_nic = instance.network_interfaces[0]
-
-      {
-        name: instance.name, hostname: instance.name,
-        creation_timestamp: instance.creation_timestamp.to_datetime,
-        zone_name: instance.zone.split('/').last,
-        machine_type: instance.machine_type,
-        network: first_nic&.network&.split('/')&.last,
+      attrs = instance_base_attrs(instance)
+      attrs.merge(network: extract_resource_name(first_nic&.network),
+        subnetwork: extract_resource_name(first_nic&.subnetwork),
         network_interfaces: instance.network_interfaces,
-        volumes: instance.disks, metadata: instance.metadata
-      }
+        volumes: instance.disks, metadata: instance.metadata)
     end
 
     private
@@ -48,21 +40,50 @@ module GoogleCloudCompute
       name&.parameterize || "foreman-#{Time.now.to_i}"
     end
 
-    def construct_network(network_name, associate_external_ip, network_interfaces)
-      # handle network_interface for external ip
-      # assign  ephemeral external IP address using associate_external_ip
+    def new_base_attrs(name, args)
+      { name: name, hostname: name, machine_type: args[:machine_type],
+        network: args[:network] || 'default', subnetwork: args[:subnetwork],
+        associate_external_ip: ActiveModel::Type::Boolean.new.cast(args[:associate_external_ip]),
+        image_id: args[:image_id] }
+    end
+
+    def instance_base_attrs(instance)
+      { name: instance.name, hostname: instance.name,
+        creation_timestamp: instance.creation_timestamp.to_datetime,
+        zone_name: instance.zone.split('/').last,
+        machine_type: instance.machine_type }
+    end
+
+    def extract_resource_name(url)
+      url&.split('/')&.last
+    end
+
+    def construct_network(network_name, subnetwork_name, zone, associate_external_ip, network_interfaces)
+      network_interfaces = build_network_interfaces(network_name, associate_external_ip, network_interfaces)
+      apply_subnetwork(network_interfaces, subnetwork_name, zone)
+      network_interfaces
+    end
+
+    def build_network_interfaces(network_name, associate_external_ip, network_interfaces)
       if associate_external_ip
-        network_interfaces = [{ network: 'global/networks/default' }] if network_interfaces.empty?
-        access_config = { name: 'External NAT', type: 'ONE_TO_ONE_NAT' }
-
-        # Note - no support for external_ip from foreman
-        # access_config[:nat_ip] = external_ip if external_ip
-        network_interfaces[0][:access_configs] = [access_config]
-        return network_interfaces
+        network_interfaces = [{ network: "global/networks/#{network_name}" }] if network_interfaces.empty?
+        network_interfaces[0][:access_configs] = [{ name: 'External NAT', type: 'ONE_TO_ONE_NAT' }]
+        network_interfaces
+      else
+        network = "https://compute.googleapis.com/compute/v1/projects/#{@client.project_id}/global/networks/#{network_name}"
+        [{ network: network }]
       end
+    end
 
-      network = "https://compute.googleapis.com/compute/v1/projects/#{@client.project_id}/global/networks/#{network_name}"
-      [{ network: network }]
+    def apply_subnetwork(network_interfaces, subnetwork_name, zone)
+      return if subnetwork_name.blank?
+
+      region = zone_to_region(zone)
+      network_interfaces[0][:subnetwork] = "projects/#{@client.project_id}/regions/#{region}/subnetworks/#{subnetwork_name}"
+    end
+
+    def zone_to_region(zone)
+      zone.to_s.split('-')[0..-2].join('-')
     end
 
     def load_image(image_id)

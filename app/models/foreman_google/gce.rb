@@ -34,6 +34,17 @@ module ForemanGoogle
       client.networks
     end
 
+    def region
+      zone.split('-')[0..-2].join('-')
+    end
+
+    def subnets(network_name = nil)
+      all_subnets = client.subnetworks(region)
+      return all_subnets if network_name.blank?
+
+      all_subnets.select { |s| s.network.split('/').last == network_name }
+    end
+
     def machine_types
       client.machine_types(zone)
     end

@@ -35,6 +35,7 @@ module ForemanGoogle
       ::Api::V2::ComputeResourcesController.include ForemanGoogle::Api::V2::ApipieExtensions
       ::Api::V2::ComputeResourcesController.include Foreman::Controller::Parameters::ComputeResourceExtension
       ::ComputeResourcesController.include Foreman::Controller::Parameters::ComputeResourceExtension
+      ::ComputeResourcesController.include ForemanGoogle::ComputeResourcesControllerExtensions
       Google::Cloud::Compute::V1::AttachedDisk.include GoogleExtensions::AttachedDisk
     rescue StandardError => e
       Rails.logger.warn "ForemanGoogle: skipping engine hook (#{e})"
