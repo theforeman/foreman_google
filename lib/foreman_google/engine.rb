@@ -22,6 +22,12 @@ module ForemanGoogle
         register_global_js_file 'global'
         register_gettext
 
+        security_block :foreman_google do
+          permission :view_compute_resources,
+            { compute_resources: [:available_subnets] },
+            resource_type: 'ComputeResource'
+        end
+
         in_to_prepare do
           compute_resource(ForemanGoogle::GCE)
         end
