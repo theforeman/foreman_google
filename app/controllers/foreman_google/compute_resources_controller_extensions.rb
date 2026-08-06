@@ -2,11 +2,8 @@ module ForemanGoogle
   module ComputeResourcesControllerExtensions
     extend ActiveSupport::Concern
 
-    included do
-      before_action :find_resource, only: [:available_subnets]
-    end
-
     def available_subnets
+      find_resource
       network = params[:network]
       subnets = @compute_resource.subnets(network).map(&:name)
 
