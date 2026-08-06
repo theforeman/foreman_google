@@ -1,7 +1,7 @@
 module ForemanGoogle
   class GoogleCompute
     attr_reader :identity, :name, :hostname, :creation_timestamp, :machine_type, :network_interfaces, :volumes,
-      :associate_external_ip, :network, :zone, :zone_name, :image_id, :disks, :metadata
+      :associate_external_ip, :network, :subnetwork, :zone, :zone_name, :image_id, :disks, :metadata
 
     def initialize(client:, zone:, identity: nil, instance: nil, args: {})
       @client = client
@@ -128,7 +128,7 @@ module ForemanGoogle
 
     def load_attributes(args_for_new)
       klass = GoogleCloudCompute::ComputeAttributes.new(@client)
-      attrs = @instance ? klass.for_instance(@instance) : klass.for_new(args_for_new)
+      attrs = @instance ? klass.for_instance(@instance) : klass.for_new(args_for_new.merge(zone: @zone))
       attrs.each { |name, value| instance_variable_set("@#{name}", value) }
     end
   end

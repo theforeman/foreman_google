@@ -48,6 +48,13 @@ module GoogleCloudCompute
           assert_equal [{ name: 'External NAT', type: 'ONE_TO_ONE_NAT' }], nic[:access_configs]
         end
 
+        it 'uses selected network with external IP instead of hardcoded default' do
+          result = subject.for_new(network: 'my-custom-vpc', associate_external_ip: '1')
+          nic = result[:network_interfaces][0]
+          assert_equal 'global/networks/my-custom-vpc', nic[:network]
+          assert_equal [{ name: 'External NAT', type: 'ONE_TO_ONE_NAT' }], nic[:access_configs]
+        end
+
         it 'uses custom network interfaces with external IP' do
           result = subject.for_new(
             associate_external_ip: '1',
@@ -56,6 +63,39 @@ module GoogleCloudCompute
           nic = result[:network_interfaces][0]
           assert_equal 'global/networks/my-net', nic[:network]
           assert_equal [{ name: 'External NAT', type: 'ONE_TO_ONE_NAT' }], nic[:access_configs]
+        end
+      end
+
+      describe 'subnetwork handling' do
+        it 'omits subnetwork from network_interfaces when not provided' do
+          result = subject.for_new(network: 'default')
+          assert_nil result[:network_interfaces][0][:subnetwork]
+          assert_nil result[:subnetwork]
+        end
+
+        it 'includes subnetwork in network_interfaces without external IP' do
+          result = subject.for_new(network: 'my-vpc', subnetwork: 'my-subnet', zone: 'europe-west1-b')
+          expected = 'projects/my-project/regions/europe-west1/subnetworks/my-subnet'
+          assert_equal expected, result[:network_interfaces][0][:subnetwork]
+          assert_equal 'my-subnet', result[:subnetwork]
+        end
+
+        it 'includes subnetwork in network_interfaces with external IP' do
+          result = subject.for_new(network: 'my-vpc', subnetwork: 'my-subnet', zone: 'us-central1-a', associate_external_ip: '1')
+          expected = 'projects/my-project/regions/us-central1/subnetworks/my-subnet'
+          assert_equal expected, result[:network_interfaces][0][:subnetwork]
+          assert_equal [{ name: 'External NAT', type: 'ONE_TO_ONE_NAT' }], result[:network_interfaces][0][:access_configs]
+        end
+
+        it 'builds correct subnetwork URL with project and region derived from zone' do
+          result = subject.for_new(network: 'corp-vpc', subnetwork: 'corp-subnet', zone: 'asia-east1-c')
+          expected = 'projects/my-project/regions/asia-east1/subnetworks/corp-subnet'
+          assert_equal expected, result[:network_interfaces][0][:subnetwork]
+        end
+
+        it 'omits subnetwork when blank string' do
+          result = subject.for_new(network: 'default', subnetwork: '', zone: 'us-east1-b')
+          assert_nil result[:network_interfaces][0][:subnetwork]
         end
       end
 
@@ -185,7 +225,7 @@ module GoogleCloudCompute
 
     describe '#for_instance' do
       let(:nics) do
-        [OpenStruct.new(network: 'projects/my-project/global/networks/custom', network_i_p: '10.0.0.1')]
+        [OpenStruct.new(network: 'projects/my-project/global/networks/custom', subnetwork: 'projects/my-project/regions/us-west1/subnetworks/my-subnet', network_i_p: '10.0.0.1')]
       end
       let(:instance) do
         OpenStruct.new(
@@ -207,6 +247,11 @@ module GoogleCloudCompute
       it 'extracts network name from full URL' do
         result = subject.for_instance(instance)
         assert_equal 'custom', result[:network]
+      end
+
+      it 'extracts subnetwork name from full URL' do
+        result = subject.for_instance(instance)
+        assert_equal 'my-subnet', result[:subnetwork]
       end
 
       it 'converts creation_timestamp to DateTime' do
