@@ -4,6 +4,26 @@ module ForemanGoogle
   module Api
     module V2
       class ComputeResourcesExtensionsTest < GoogleTestCase
+        describe 'the real API controller integration' do
+          it 'loads the Google parameter extension into the compute resource controller' do
+            assert_includes ::Api::V2::ComputeResourcesController.ancestors,
+              ::Foreman::Controller::Parameters::ComputeResourceExtension
+          end
+
+          it 'permits Google compute resource parameters' do
+            context = ::Api::V2::ComputeResourcesController.parameter_filter_context
+            params = ActionController::Parameters.new(
+              compute_resource: { key_path: '/tmp/key.json', zone: 'us-east1-b' }
+            )
+
+            filtered = ::Api::V2::ComputeResourcesController
+                       .compute_resource_params_filter
+                       .filter_params(params, context)
+
+            assert_equal({ 'key_path' => '/tmp/key.json', 'zone' => 'us-east1-b' }, filtered.to_h)
+          end
+        end
+
         let(:controller_class) do
           Class.new do
             def self.before_action(*)

@@ -18,7 +18,7 @@ module ForemanGoogle
 
     initializer 'foreman_google.register_plugin', before: :finisher_hook do |_app|
       Foreman::Plugin.register :foreman_google do
-        requires_foreman '>= 3.13.0'
+        requires_foreman '>= 5.1'
         register_global_js_file 'global'
         register_gettext
 
