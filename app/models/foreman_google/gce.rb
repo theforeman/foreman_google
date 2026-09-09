@@ -96,10 +96,8 @@ module ForemanGoogle
     end
 
     def setup_key_pair
-      require 'sshkey'
-
-      key = ::SSHKey.generate
-      build_key_pair name: "foreman-#{id}#{Foreman.uuid}", secret: key.private_key, public: key.ssh_public_key
+      key_pair = Foreman::Provision::SshKey.generate
+      build_key_pair name: "foreman-#{id}#{Foreman.uuid}", secret: key_pair.private_key, public: key_pair.public_key
     end
 
     def self.provider_friendly_name
