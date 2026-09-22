@@ -10,7 +10,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: foreman_google 3.0.6\n"
+"Project-Id-Version: foreman_google 3.1.0\n"
 "Report-Msgid-Bugs-To: \n"
 "PO-Revision-Date: 2022-08-01 12:51+0000\n"
 "Last-Translator: Ewoud Kohl van Wijngaarden <ewoud+transifex@kohlvanwijngaarde"
@@ -99,3 +99,9 @@ msgstr "Zone, GCE 전용"
 
 msgid "console is not available at this time because the instance is powered off"
 msgstr "인스턴스 전원이 꺼져 있으므로 현재 콘솔을 사용할 수 없습니다."
+
+msgid "unable to start machine that is not persisted"
+msgstr ""
+
+msgid "unable to stop machine that is not persisted"
+msgstr ""

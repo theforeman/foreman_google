@@ -3,7 +3,7 @@
   "locale_data": {
     "foreman_google": {
       "": {
-        "Project-Id-Version": "foreman_google 3.0.6",
+        "Project-Id-Version": "foreman_google 3.1.0",
         "Report-Msgid-Bugs-To": "",
         "PO-Revision-Date": "2022-08-01 12:51+0000",
         "Last-Translator": "Ewoud Kohl van Wijngaarden <ewoud+transifex@kohlvanwijngaarden.nl>, 2024",
@@ -94,6 +94,12 @@
       ],
       "console is not available at this time because the instance is powered off": [
         "인스턴스 전원이 꺼져 있으므로 현재 콘솔을 사용할 수 없습니다."
+      ],
+      "unable to start machine that is not persisted": [
+        ""
+      ],
+      "unable to stop machine that is not persisted": [
+        ""
       ]
     }
   }
