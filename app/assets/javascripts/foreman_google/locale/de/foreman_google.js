@@ -3,7 +3,7 @@
   "locale_data": {
     "foreman_google": {
       "": {
-        "Project-Id-Version": "foreman_google 3.0.6",
+        "Project-Id-Version": "foreman_google 3.1.0",
         "Report-Msgid-Bugs-To": "",
         "PO-Revision-Date": "2022-08-01 12:51+0000",
         "Last-Translator": "Lukas Kallies <github.com@luke-web.de>, 2022",
@@ -94,6 +94,12 @@
       ],
       "console is not available at this time because the instance is powered off": [
         "Konsole ist derzeit nicht verfügbar, da die Instanz ausgeschaltet ist"
+      ],
+      "unable to start machine that is not persisted": [
+        ""
+      ],
+      "unable to stop machine that is not persisted": [
+        ""
       ]
     }
   }

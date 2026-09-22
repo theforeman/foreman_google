@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: foreman_google 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-11 15:19+0100\n"
-"PO-Revision-Date: 2026-02-11 15:19+0100\n"
+"POT-Creation-Date: 2026-09-22 17:35+0000\n"
+"PO-Revision-Date: 2026-09-22 17:35+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -46,12 +46,20 @@ msgid ""
 "ON file"
 msgstr ""
 
-#: ../app/models/foreman_google/gce.rb:128
+#: ../app/models/foreman_google/gce.rb:126
 msgid "console is not available at this time because the instance is powered off"
 msgstr ""
 
-#: ../app/models/foreman_google/gce.rb:172
+#: ../app/models/foreman_google/gce.rb:170
 msgid "Missing an image for operating system!"
+msgstr ""
+
+#: ../app/models/foreman_google/google_compute.rb:38
+msgid "unable to start machine that is not persisted"
+msgstr ""
+
+#: ../app/models/foreman_google/google_compute.rb:43
+msgid "unable to stop machine that is not persisted"
 msgstr ""
 
 #: ../app/views/compute_resources/form/_gce.html.erb:3
