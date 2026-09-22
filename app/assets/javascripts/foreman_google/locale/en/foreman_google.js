@@ -5,7 +5,7 @@
       "": {
         "Project-Id-Version": "foreman_google 1.0.0",
         "Report-Msgid-Bugs-To": "",
-        "PO-Revision-Date": "2026-02-11 15:19+0100",
+        "PO-Revision-Date": "2026-09-22 17:35+0000",
         "Last-Translator": "FULL NAME <EMAIL@ADDRESS>",
         "Language-Team": "LANGUAGE <LL@li.org>",
         "Language": "",
@@ -93,6 +93,12 @@
         ""
       ],
       "console is not available at this time because the instance is powered off": [
+        ""
+      ],
+      "unable to start machine that is not persisted": [
+        ""
+      ],
+      "unable to stop machine that is not persisted": [
         ""
       ]
     }
