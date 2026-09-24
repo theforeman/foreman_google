@@ -14,5 +14,6 @@
 	</div>
 <% end %>
 
-<%= selectable_f f, :network, compute_resource.networks, {}, :label => _('Network'), :label_size => "col-md-2" %>
+<%= selectable_f f, :network, compute_resource.networks, {}, :label => _('Network'), :label_size => "col-md-2", 'data-subnets-url' => available_subnets_compute_resource_path(compute_resource) %>
+<%= selectable_f f, :subnetwork, compute_resource.subnets(f.object.network).map(&:name), {}, :label => _('Subnet'), :label_size => "col-md-2" %>
 <%= checkbox_f f, :associate_external_ip, :label => _('Associate Ephemeral External IP'), :label_size => "col-md-2" %>

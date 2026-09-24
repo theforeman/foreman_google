@@ -114,6 +114,59 @@ module ForemanGoogle
       end
     end
 
+    describe '#region' do
+      it 'derives region from zone by stripping the last segment' do
+        subject.zone = 'europe-west1-b'
+        assert_equal 'europe-west1', subject.region
+      end
+
+      it 'handles multi-segment zone names' do
+        subject.zone = 'us-central1-a'
+        assert_equal 'us-central1', subject.region
+      end
+
+      it 'handles asia zones' do
+        subject.zone = 'asia-east1-c'
+        assert_equal 'asia-east1', subject.region
+      end
+    end
+
+    describe '#subnets' do
+      let(:subnets) do
+        [
+          OpenStruct.new(name: 'subnet-a', network: 'projects/project_id/global/networks/vpc-one'),
+          OpenStruct.new(name: 'subnet-b', network: 'projects/project_id/global/networks/vpc-two'),
+          OpenStruct.new(name: 'subnet-c', network: 'projects/project_id/global/networks/vpc-one'),
+        ]
+      end
+
+      setup do
+        service.stubs(:subnetworks).with('us-east1').returns(subnets)
+      end
+
+      it 'returns all subnets when no network filter' do
+        result = subject.subnets
+        assert_equal 3, result.length
+        assert_equal %w[subnet-a subnet-b subnet-c], result.map(&:name)
+      end
+
+      it 'filters subnets by network name' do
+        result = subject.subnets('vpc-one')
+        assert_equal 2, result.length
+        assert_equal %w[subnet-a subnet-c], result.map(&:name)
+      end
+
+      it 'returns empty when no subnets match network' do
+        result = subject.subnets('non-existent')
+        assert_empty result
+      end
+
+      it 'delegates to client.subnetworks with derived region' do
+        service.expects(:subnetworks).with('us-east1').returns([])
+        subject.subnets
+      end
+    end
+
     describe '#machine_types' do
       it 'returns machine types for the zone from client' do
         types = [OpenStruct.new(name: 'e2-micro')]
