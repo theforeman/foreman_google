@@ -6,7 +6,7 @@
         "Project-Id-Version": "foreman_google 3.1.0",
         "Report-Msgid-Bugs-To": "",
         "PO-Revision-Date": "2022-08-01 12:51+0000",
-        "Last-Translator": "Ewoud Kohl van Wijngaarden <ewoud+transifex@kohlvanwijngaarden.nl>, 2024",
+        "Last-Translator": "Ondřej Gajdušek, 2026",
         "Language-Team": "Japanese (https://app.transifex.com/foreman/teams/114/ja/)",
         "MIME-Version": "1.0",
         "Content-Type": "text/plain; charset=UTF-8",
@@ -96,10 +96,10 @@
         "インスタンスの電源がオフであるため、現時点ではコンソールは使用できません"
       ],
       "unable to start machine that is not persisted": [
-        ""
+        "永続化されていないマシンを起動できません"
       ],
       "unable to stop machine that is not persisted": [
-        ""
+        "永続化されていないマシンを停止できません"
       ]
     }
   }

@@ -9,14 +9,14 @@
 # tim123, 2022
 # Amit Upadhye <aupadhye@redhat.com>, 2022
 # Ewoud Kohl van Wijngaarden <ewoud+transifex@kohlvanwijngaarden.nl>, 2024
+# Ondřej Gajdušek, 2026
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: foreman_google 3.1.0\n"
 "Report-Msgid-Bugs-To: \n"
 "PO-Revision-Date: 2022-08-01 12:51+0000\n"
-"Last-Translator: Ewoud Kohl van Wijngaarden <ewoud+transifex@kohlvanwijngaarde"
-"n.nl>, 2024\n"
+"Last-Translator: Ondřej Gajdušek, 2026\n"
 "Language-Team: Chinese (China) (https://app.transifex.com/foreman/teams/114/zh"
 "_CN/)\n"
 "MIME-Version: 1.0\n"
@@ -104,7 +104,7 @@ msgid "console is not available at this time because the instance is powered off
 msgstr "控制台目前不可用，因为实例已关闭"
 
 msgid "unable to start machine that is not persisted"
-msgstr ""
+msgstr "无法启动没有持久化的机器"
 
 msgid "unable to stop machine that is not persisted"
-msgstr ""
+msgstr "无法停止没有持久化的机器"
