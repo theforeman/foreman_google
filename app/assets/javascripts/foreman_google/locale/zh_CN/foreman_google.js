@@ -6,7 +6,7 @@
         "Project-Id-Version": "foreman_google 3.1.0",
         "Report-Msgid-Bugs-To": "",
         "PO-Revision-Date": "2022-08-01 12:51+0000",
-        "Last-Translator": "Ewoud Kohl van Wijngaarden <ewoud+transifex@kohlvanwijngaarden.nl>, 2024",
+        "Last-Translator": "Ondřej Gajdušek, 2026",
         "Language-Team": "Chinese (China) (https://app.transifex.com/foreman/teams/114/zh_CN/)",
         "MIME-Version": "1.0",
         "Content-Type": "text/plain; charset=UTF-8",
@@ -96,10 +96,10 @@
         "控制台目前不可用，因为实例已关闭"
       ],
       "unable to start machine that is not persisted": [
-        ""
+        "无法启动没有持久化的机器"
       ],
       "unable to stop machine that is not persisted": [
-        ""
+        "无法停止没有持久化的机器"
       ]
     }
   }
