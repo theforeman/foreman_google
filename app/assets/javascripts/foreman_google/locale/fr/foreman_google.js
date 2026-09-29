@@ -6,7 +6,7 @@
         "Project-Id-Version": "foreman_google 3.1.0",
         "Report-Msgid-Bugs-To": "",
         "PO-Revision-Date": "2022-08-01 12:51+0000",
-        "Last-Translator": "Ewoud Kohl van Wijngaarden <ewoud+transifex@kohlvanwijngaarden.nl>, 2024",
+        "Last-Translator": "Ondřej Gajdušek, 2026",
         "Language-Team": "French (https://app.transifex.com/foreman/teams/114/fr/)",
         "MIME-Version": "1.0",
         "Content-Type": "text/plain; charset=UTF-8",
@@ -96,10 +96,10 @@
         "la console n'est pas disponible pour le moment car l'instance est éteinte"
       ],
       "unable to start machine that is not persisted": [
-        ""
+        "Impossible de démarrer une machine qui n'est pas persistante."
       ],
       "unable to stop machine that is not persisted": [
-        ""
+        "Impossible d'arrêter une machine dont l'enregistrement n'est pas persistant."
       ]
     }
   }

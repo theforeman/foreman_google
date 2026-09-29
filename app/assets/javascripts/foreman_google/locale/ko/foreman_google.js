@@ -6,7 +6,7 @@
         "Project-Id-Version": "foreman_google 3.1.0",
         "Report-Msgid-Bugs-To": "",
         "PO-Revision-Date": "2022-08-01 12:51+0000",
-        "Last-Translator": "Ewoud Kohl van Wijngaarden <ewoud+transifex@kohlvanwijngaarden.nl>, 2024",
+        "Last-Translator": "Ondřej Gajdušek, 2026",
         "Language-Team": "Korean (https://app.transifex.com/foreman/teams/114/ko/)",
         "MIME-Version": "1.0",
         "Content-Type": "text/plain; charset=UTF-8",
@@ -96,10 +96,10 @@
         "인스턴스 전원이 꺼져 있으므로 현재 콘솔을 사용할 수 없습니다."
       ],
       "unable to start machine that is not persisted": [
-        ""
+        "영구 저장되지 않은 머신은 시작할 수 없습니다."
       ],
       "unable to stop machine that is not persisted": [
-        ""
+        "영구 저장되지 않은 머신은 중지할 수 없습니다."
       ]
     }
   }
