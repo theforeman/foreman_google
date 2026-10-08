@@ -6,16 +6,30 @@ module ForemanGoogle
 
         # rubocop:disable Rails/LexicallyScopedActionFilter
         included do
-          before_action :read_key, only: [:create]
-          before_action :deprecated_params, only: [:create]
+          filter_parameters lambda { |key, value|
+            value.replace('[FILTERED]') if key == 'key_content'
+          }
+          before_action :read_key, only: %i[create update]
+          before_action :deprecated_params, only: %i[create update]
         end
         # rubocop:enable Rails/LexicallyScopedActionFilter
 
         private
 
         def read_key
-          return unless compute_resource_params['provider'] == 'GCE'
-          params[:compute_resource][:password] = File.read(params['compute_resource'].delete('key_path'))
+          return unless gce_provider?
+
+          key_content = extract_key_content
+          params[:compute_resource][:password] = key_content if key_content.present?
+        end
+
+        def gce_provider?
+          provider = action_name == 'create' ? params[:compute_resource][:provider] : @compute_resource&.provider
+          provider == 'GCE'
+        end
+
+        def extract_key_content
+          params[:compute_resource].delete(:key_content)
         end
 
         def deprecated_params

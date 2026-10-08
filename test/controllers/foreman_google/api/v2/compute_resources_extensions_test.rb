@@ -13,14 +13,14 @@ module ForemanGoogle
           it 'permits Google compute resource parameters' do
             context = ::Api::V2::ComputeResourcesController.parameter_filter_context
             params = ActionController::Parameters.new(
-              compute_resource: { key_path: '/tmp/key.json', zone: 'us-east1-b' }
+              compute_resource: { key_content: '{"type":"service_account"}', zone: 'us-east1-b' }
             )
 
             filtered = ::Api::V2::ComputeResourcesController
                        .compute_resource_params_filter
                        .filter_params(params, context)
 
-            assert_equal({ 'key_path' => '/tmp/key.json', 'zone' => 'us-east1-b' }, filtered.to_h)
+            assert_equal({ 'key_content' => '{"type":"service_account"}', 'zone' => 'us-east1-b' }, filtered.to_h)
           end
         end
 
@@ -29,9 +29,13 @@ module ForemanGoogle
             def self.before_action(*)
             end
 
+            def self.filter_parameters(*)
+              # Stub for parameter filtering in tests
+            end
+
             include ForemanGoogle::Api::V2::ComputeResourcesExtensions
 
-            attr_accessor :params
+            attr_accessor :params, :action_name, :compute_resource
 
             def compute_resource_params
               params[:compute_resource]
@@ -40,29 +44,40 @@ module ForemanGoogle
         end
 
         describe '#read_key' do
-          it 'reads key file content into password for GCE provider' do
+          it 'copies key_content into password for GCE provider on create' do
             key_content = '{"type": "service_account", "project_id": "test"}'
+            ctrl = controller_class.new
+            ctrl.action_name = 'create'
+            ctrl.params = { 'compute_resource' => { 'provider' => 'GCE', 'key_content' => key_content } }.with_indifferent_access
+            ctrl.send(:read_key)
 
-            Tempfile.open('gce_key') do |f|
-              f.write(key_content)
-              f.flush
+            assert_equal key_content, ctrl.params[:compute_resource][:password]
+            assert_not ctrl.params[:compute_resource].key?('key_content')
+          end
 
-              ctrl = controller_class.new
-              ctrl.params = { 'compute_resource' => { 'provider' => 'GCE', 'key_path' => f.path } }.with_indifferent_access
-              ctrl.send(:read_key)
+          it 'copies key_content into password for GCE provider on update' do
+            key_content = '{"type": "service_account", "project_id": "test"}'
+            ctrl = controller_class.new
+            ctrl.action_name = 'update'
+            compute_resource = mock('compute_resource')
+            compute_resource.stubs(:provider).returns('GCE')
+            ctrl.instance_variable_set(:@compute_resource, compute_resource)
+            ctrl.params = { 'compute_resource' => { 'key_content' => key_content } }.with_indifferent_access
+            ctrl.send(:read_key)
 
-              assert_equal key_content, ctrl.params[:compute_resource][:password]
-              assert_not ctrl.params[:compute_resource].key?('key_path')
-            end
+            assert_equal key_content, ctrl.params[:compute_resource][:password]
+            assert_not ctrl.params[:compute_resource].key?('key_content')
           end
 
           it 'skips when provider is not GCE' do
+            key_content = '{"type": "service_account", "project_id": "test"}'
             ctrl = controller_class.new
-            ctrl.params = { 'compute_resource' => { 'provider' => 'EC2', 'key_path' => '/nonexistent' } }.with_indifferent_access
+            ctrl.action_name = 'create'
+            ctrl.params = { 'compute_resource' => { 'provider' => 'EC2', 'key_content' => key_content } }.with_indifferent_access
             ctrl.send(:read_key)
 
             assert_nil ctrl.params[:compute_resource][:password]
-            assert_equal '/nonexistent', ctrl.params[:compute_resource]['key_path']
+            assert_equal key_content, ctrl.params[:compute_resource]['key_content']
           end
         end
       end
