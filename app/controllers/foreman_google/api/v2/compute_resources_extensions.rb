@@ -29,7 +29,8 @@ module ForemanGoogle
         end
 
         def extract_key_content
-          params[:compute_resource].delete(:key_content)
+          params[:compute_resource].delete(:key_content) ||
+            params[:compute_resource].delete('key_content')
         end
 
         def deprecated_params
