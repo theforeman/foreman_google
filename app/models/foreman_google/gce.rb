@@ -152,7 +152,10 @@ module ForemanGoogle
     private
 
     def client
-      @client ||= ForemanGoogle::GoogleComputeAdapter.new(auth_json_string: password)
+      @client ||= ForemanGoogle::GoogleComputeAdapter.new(
+        auth_json_string: password,
+        connection_options: connection_options
+      )
     end
 
     def set_vm_volumes_attributes(vm, vm_attrs)
