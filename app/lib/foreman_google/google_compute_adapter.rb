@@ -1,8 +1,12 @@
 # rubocop:disable Rails/SkipsModelValidations, Metrics/ClassLength
+require 'faraday'
+require 'google/cloud/compute/v1/zones/credentials'
+
 module ForemanGoogle
   class GoogleComputeAdapter
-    def initialize(auth_json_string:)
+    def initialize(auth_json_string:, connection_options: {})
       @auth_json = JSON.parse(auth_json_string)
+      @connection_options = connection_options
     end
 
     def project_id
@@ -160,9 +164,43 @@ module ForemanGoogle
     end
 
     def resource_client(resource_name)
-      ::Google::Cloud::Compute.public_send(resource_name) do |config|
-        config.credentials = @auth_json
+      client = ::Google::Cloud::Compute.public_send(resource_name) do |config|
+        config.credentials = credentials
       end
+
+      configure_http_proxy(client, resource_name)
+      client
+    end
+
+    def credentials
+      return @auth_json unless @connection_options[:proxy]
+
+      @credentials ||= ::Google::Cloud::Compute::V1::Zones::Credentials.new(
+        @auth_json,
+        connection_builder: -> { faraday_connection }
+      )
+    end
+
+    def faraday_connection
+      Faraday.new do |connection|
+        configure_faraday_connection(connection)
+        connection.adapter :net_http
+      end
+    end
+
+    def configure_http_proxy(client, resource_name)
+      return unless @connection_options[:proxy]
+
+      # The generated Compute clients don't expose their REST transport options.
+      service_stub = client.instance_variable_get("@#{resource_name}_stub")
+      rest_client_stub = service_stub.instance_variable_get(:@client_stub)
+      connection = rest_client_stub.instance_variable_get(:@connection)
+      configure_faraday_connection(connection)
+    end
+
+    def configure_faraday_connection(connection)
+      connection.proxy = @connection_options[:proxy]
+      connection.ssl.cert_store = @connection_options[:ssl_cert_store] if @connection_options[:ssl_cert_store]
     end
 
     def all_projects

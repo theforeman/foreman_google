@@ -257,5 +257,34 @@ module ForemanGoogle
         assert result[:duration] <= 1
       end
     end
+
+    describe 'HTTP proxy support' do
+      it 'applies the compute resource proxy to Google API and OAuth connections' do
+        proxy_url = 'http://[2001:db8::1]:3128'
+        ssl_cert_store = OpenSSL::X509::Store.new
+        http_proxy = FactoryBot.build(:http_proxy, url: proxy_url)
+        http_proxy.stubs(:ssl_cert_store).returns(ssl_cert_store)
+        compute_resource = ForemanGoogle::GCE.new(
+          zone: 'us-east1-b',
+          password: gauth_json,
+          http_proxy: http_proxy
+        )
+
+        adapter = compute_resource.send(:client)
+        client = adapter.send(:resource_client, 'zones')
+        service_stub = client.instance_variable_get(:@zones_stub)
+        rest_client_stub = service_stub.instance_variable_get(:@client_stub)
+        api_connection = rest_client_stub.instance_variable_get(:@connection)
+        oauth_client = adapter.send(:credentials).instance_variable_get(:@client)
+        oauth_connection = oauth_client.send(:build_default_connection)
+
+        [api_connection, oauth_connection].each do |connection|
+          assert_equal '2001:db8::1', connection.proxy.uri.hostname
+          assert_equal 3128, connection.proxy.port
+          assert_same ssl_cert_store, connection.ssl.cert_store
+          assert_equal 'Faraday::Adapter::NetHttp', connection.builder.adapter.name
+        end
+      end
+    end
   end
 end
